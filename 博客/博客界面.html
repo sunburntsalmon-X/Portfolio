@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morandi Minimalist Blog</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        morandi: {
+                            bg: '#F2EFE9',       
+                            card: '#FEFCF8',     
+                            text: '#4A4E69',     
+                            muted: '#9A8C98',    
+                            green: '#A3B18A',    
+                            blue: '#8E9AAF',     
+                            pink: '#D4A373',     
+                            border: '#E0DCD3'    
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif SC"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --sidebar-width: 260px;
+        }
+
+        body {
+            background-color: #F2EFE9;
+            color: #4A4E69;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .smooth-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 侧边栏基础样式 */
+        #sidebar {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+        }
+
+        /* 收起状态样式覆盖 */
+        .collapsed-state {
+            --sidebar-width: 76px !important;
+        }
+
+        .collapsed-state .sidebar-text-element {
+            opacity: 0;
+            visibility: hidden;
+            width: 0;
+            margin-left: 0;
+            overflow: hidden;
+            position: absolute;
+        }
+
+        .collapsed-state .sidebar-padding {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            text-align: center;
+        }
+
+        .collapsed-state .nav-item {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        /* 文章卡片 */
+        .article-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(74, 78, 105, 0.15);
+        }
+
+        /* 高亮标注样式 */
+        .user-highlight {
+            background-color: rgba(212, 163, 115, 0.3);
+            border-bottom: 2px solid #D4A373;
+            cursor: pointer;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            #sidebar {
+                position: fixed;
+                left: -280px;
+                height: 100vh;
+                z-index: 100;
+                width: 280px !important;
+                min-width: 280px !important;
+            }
+            #sidebar.mobile-open {
+                left: 0;
+            }
+            .collapsed-state {
+                --sidebar-width: 280px !important;
+            }
+        }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden font-sans">
+
+    <!-- 1. 左侧导航栏 (Sidebar) -->
+    <nav id="sidebar" class="h-full bg-morandi-card border-r border-morandi-border flex flex-col smooth-transition relative z-50 overflow-hidden">
+        
+        <!-- 折叠/展开切换按钮 (仅桌面端) -->
+        <button id="sidebar-toggle" class="absolute right-3 top-6 text-morandi-muted hover:text-morandi-green transition-colors hidden md:block">
+            <i id="toggle-icon" class="fas fa-bars text-sm"></i>
+        </button>
+
+        <!-- 顶部 Logo -->
+        <div class="h-20 flex items-center px-6 shrink-0 border-b border-morandi-border/50 sidebar-padding">
+            <div class="w-8 h-8 bg-morandi-green rounded-lg flex items-center justify-center text-white shrink-0">
+                <i class="fas fa-leaf text-sm"></i>
+            </div>
+            <span class="ml-3 font-serif font-bold text-lg whitespace-nowrap sidebar-text-element transition-opacity duration-300">SunburntSalomon.</span>
+        </div>
+
+        <!-- 导航内容 -->
+        <div class="flex-1 overflow-y-auto no-scrollbar py-6 space-y-8 sidebar-padding">
+            
+            <!-- 搜索 -->
+            <div class="px-5 sidebar-text-element">
+                <div class="relative">
+                    <input type="text" placeholder="搜索..." class="w-full bg-morandi-bg border-none rounded-full py-2 pl-9 pr-4 text-xs focus:ring-1 focus:ring-morandi-green outline-none">
+                    <i class="fas fa-search absolute left-3 top-2.5 text-morandi-muted text-[10px]"></i>
+                </div>
+            </div>
+
+            <!-- 分类/标签 -->
+            <div class="space-y-2">
+                <h3 class="px-6 text-[10px] font-bold text-morandi-muted uppercase tracking-[0.2em] mb-4 sidebar-text-element">分类筛选</h3>
+                <div id="tag-cloud" class="space-y-1 px-3">
+                    <!-- JS 生成 -->
+                </div>
+            </div>
+
+            <!-- 快捷入口 (收起时显示更明显) -->
+            <div class="border-t border-morandi-border/30 pt-6 px-3 space-y-2">
+                <div onclick="window.location.href='add-article.html'" class="nav-item flex items-center px-3 py-2 rounded-lg text-morandi-muted hover:bg-morandi-bg transition-colors cursor-pointer group">
+                    <i class="fas fa-plus-circle text-sm w-5 text-center"></i>
+                    <span class="ml-3 text-xs sidebar-text-element">添加文章</span>
+                </div>
+                <div class="nav-item flex items-center px-3 py-2 rounded-lg text-morandi-muted hover:bg-morandi-bg transition-colors cursor-pointer group">
+                    <i class="fas fa-bookmark text-sm w-5 text-center"></i>
+                    <span class="ml-3 text-xs sidebar-text-element">我的收藏</span>
+                </div>
+                <div class="nav-item flex items-center px-3 py-2 rounded-lg text-morandi-muted hover:bg-morandi-bg transition-colors cursor-pointer group">
+                    <i class="fas fa-history text-sm w-5 text-center"></i>
+                    <span class="ml-3 text-xs sidebar-text-element">阅读历史</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部用户信息 -->
+        <div class="p-5 border-t border-morandi-border/50 shrink-0 sidebar-padding">
+            <div class="flex items-center gap-3 nav-item">
+                <div class="w-8 h-8 rounded-full bg-morandi-blue flex-shrink-0"></div>
+                <div class="sidebar-text-element">
+                    <p class="text-xs font-bold">游客</p>
+                    <p class="text-[10px] text-morandi-muted">留个脚印</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. 中间：文章列表 -->
+    <main id="main-content" class="flex-1 h-full overflow-hidden flex flex-col smooth-transition bg-morandi-bg">
+        <!-- 移动端 Header -->
+        <header class="h-16 flex items-center justify-between px-6 md:hidden shrink-0 border-b border-morandi-border bg-white/50 backdrop-blur">
+            <button id="mobile-menu-btn" class="text-morandi-text p-2"><i class="fas fa-bars"></i></button>
+            <span class="font-serif font-bold">Morandi.</span>
+            <div class="w-10"></div>
+        </header>
+
+        <!-- 列表容器 -->
+        <div class="flex-1 overflow-y-auto p-6 md:p-12 no-scrollbar">
+            <div class="max-w-5xl mx-auto">
+                <header class="mb-12">
+                    <h2 class="font-serif text-3xl text-morandi-text font-bold mb-2">思维博客</h2>
+                    <p class="text-sm text-morandi-muted uppercase tracking-widest">Explore thoughts and ideas</p>
+                </header>
+                
+                <div id="article-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- JS 生成 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 3. 右侧：文本阅读器 -->
+    <aside id="reader-panel" class="fixed right-0 top-0 bottom-0 bg-white border-l border-morandi-border shadow-2xl translate-x-full smooth-transition z-[60] flex flex-col w-full md:w-[50%] lg:w-[45%]">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-morandi-border bg-white/80 backdrop-blur shrink-0">
+            <button onclick="closeReader()" class="text-morandi-muted hover:text-morandi-pink transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="flex gap-4">
+                <button title="查看标注" class="text-sm text-morandi-muted hover:text-morandi-green"><i class="far fa-edit mr-1"></i> 标注</button>
+                <div class="h-4 w-px bg-morandi-border self-center"></div>
+                <button title="分享" class="text-sm text-morandi-muted hover:text-morandi-green"><i class="far fa-share-square"></i></button>
+            </div>
+        </div>
+
+        <div id="reader-content" class="flex-1 overflow-y-auto p-8 md:p-16 font-serif leading-loose text-gray-700">
+            <div id="reader-meta" class="text-xs uppercase tracking-widest text-morandi-muted mb-4">Meta Info</div>
+            <h2 id="reader-title" class="text-3xl md:text-4xl font-bold text-morandi-text mb-10 leading-snug">文章标题</h2>
+            <div id="reader-body" class="space-y-6 text-lg">
+                <!-- 正文内容 -->
+            </div>
+
+            <!-- 标注浮动按钮 -->
+            <button id="highlight-btn" class="fixed hidden bg-morandi-text text-white px-4 py-2 rounded-full shadow-2xl text-xs flex items-center gap-2 transform -translate-y-full mt-[-10px] z-[70] hover:bg-morandi-pink transition-colors">
+                <i class="fas fa-highlighter"></i> 标注选中
+            </button>
+        </div>
+    </aside>
+
+    <!-- 遮罩层 (移动端) -->
+    <div id="overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[40] hidden opacity-0 transition-opacity"></div>
+
+    <script>
+        // --- 全局变量 ---
+        let articles = [];
+        let currentFilter = 'all';
+        let isSidebarExpanded = true;
+
+        // --- 初始化 ---
+        function init() {
+            fetchArticles();
+        }
+
+        // --- 图片预加载函数 ---
+        function preloadImage(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = src;
+                img.onload = resolve;
+                img.onerror = () => {
+                    // 如果主图片加载失败，尝试加载默认图片
+                    const defaultImg = new Image();
+                    defaultImg.src = 'https://i.postimg.cc/mz0Tf7wP/default-placeholder.jpg';
+                    defaultImg.onload = resolve;
+                    defaultImg.onerror = reject;
+                };
+            });
+        }
+
+        // --- 预加载所有文章图片 ---
+        async function preloadAllImages() {
+            if (!articles || articles.length === 0) return;
+            
+            const imagePromises = [];
+            articles.forEach(article => {
+                if (article.images && article.images.length > 0) {
+                    article.images.forEach(img => {
+                        imagePromises.push(preloadImage(img.src));
+                    });
+                }
+            });
+            
+            try {
+                await Promise.all(imagePromises);
+                console.log('所有图片预加载完成');
+            } catch (error) {
+                console.error('部分图片预加载失败:', error);
+            }
+        }
+
+        // --- 从JSON文件加载文章 ---
+        async function fetchArticles() {
+            try {
+                const response = await fetch('articles.json');
+                articles = await response.json();
+                renderTags();
+                renderArticles();
+                setupSidebarToggle();
+                setupMobileMenu();
+                setupHighlighter();
+                
+                // 异步预加载图片，不阻塞界面渲染
+                preloadAllImages();
+            } catch (error) {
+                console.error('加载文章数据失败:', error);
+            }
+        }
+
+        // --- 导航栏切换逻辑 ---
+        function setupSidebarToggle() {
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const toggleIcon = document.getElementById('toggle-icon');
+
+            toggleBtn.onclick = () => {
+                isSidebarExpanded = !isSidebarExpanded;
+                if (isSidebarExpanded) {
+                    sidebar.classList.remove('collapsed-state');
+                    toggleIcon.className = "fas fa-bars text-sm";
+                } else {
+                    sidebar.classList.add('collapsed-state');
+                    toggleIcon.className = "fas fa-indent text-sm";
+                }
+            };
+        }
+
+        // --- 移动端逻辑 ---
+        function setupMobileMenu() {
+            const btn = document.getElementById('mobile-menu-btn');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+
+            btn.onclick = () => {
+                sidebar.classList.add('mobile-open');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+            };
+
+            overlay.onclick = () => {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            };
+        }
+
+        // --- 渲染标签 ---
+        function renderTags() {
+            const tagCloud = document.getElementById('tag-cloud');
+            const tags = ['all', ...new Set(articles.flatMap(a => a.tags))];
+            
+            const iconMap = {
+                'all': 'fa-th-large',
+                '设计': 'fa-paint-brush',
+                '美学': 'fa-palette',
+                '生活': 'fa-coffee',
+                '哲学': 'fa-lightbulb',
+                '技术': 'fa-code',
+                '旅行': 'fa-map-marker-alt'
+            };
+
+            tagCloud.innerHTML = tags.map(tag => `
+                <button onclick="filterArticles('${tag}')" class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl text-xs smooth-transition group ${currentFilter === tag ? 'bg-morandi-green text-white shadow-sm' : 'text-morandi-text hover:bg-morandi-bg'}">
+                    <i class="fas ${iconMap[tag] || 'fa-hashtag'} w-5 text-center"></i>
+                    <span class="ml-3 sidebar-text-element whitespace-nowrap">${tag.charAt(0).toUpperCase() + tag.slice(1)}</span>
+                </button>
+            `).join('');
+        }
+
+        // --- 渲染文章 ---
+        function renderArticles() {
+            const grid = document.getElementById('article-grid');
+            const filtered = currentFilter === 'all' ? articles : articles.filter(a => a.tags.includes(currentFilter));
+            
+            grid.innerHTML = filtered.map((a, i) => `
+                <div onclick="openReader(${a.id})" class="article-card bg-morandi-card p-8 rounded-2xl border border-morandi-border/40 cursor-pointer flex flex-col justify-between h-[320px]" style="animation: fadeIn 0.5s ease backwards ${i * 0.1}s">
+                    <div>
+                        <div class="flex gap-2 mb-3">
+                            ${a.tags.map(t => `<span class="text-[9px] text-morandi-muted bg-morandi-bg px-2 py-0.5 rounded tracking-tighter">#${t}</span>`).join('')}
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-morandi-text mb-4 leading-snug">${a.title}</h3>
+                        <p class="text-sm text-morandi-muted leading-relaxed line-clamp-3 font-light">${a.preview}</p>
+                    </div>
+                    <div class="flex items-center justify-between mt-8 text-[10px] text-morandi-muted tracking-widest uppercase">
+                        <span>${a.date}</span>
+                        <span class="w-8 h-px bg-morandi-border group-hover:w-12 transition-all"></span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.filterArticles = (tag) => {
+            currentFilter = tag;
+            renderTags();
+            renderArticles();
+        };
+
+        // --- 图片预加载功能 ---
+        function preloadImages(imageUrls) {
+            imageUrls.forEach(url => {
+                const img = new Image();
+                img.src = url;
+            });
+        }
+
+        // --- 阅读器控制 ---
+        window.openReader = (id) => {
+            const article = articles.find(a => a.id === id);
+            const panel = document.getElementById('reader-panel');
+            const main = document.getElementById('main-content');
+
+            document.getElementById('reader-title').innerText = article.title;
+            document.getElementById('reader-meta').innerText = `${article.date} • ${article.tags.join(' / ')}`;
+            
+            // 预加载文章图片
+            if (article.images && article.images.length > 0) {
+                const imageUrls = article.images.map(img => img.src);
+                preloadImages(imageUrls);
+            }
+            
+            // 构建包含图片的文章内容
+            let contentHTML = article.content;
+            // 如果存在图片，在内容前插入图片展示区域
+            if (article.images && article.images.length > 0) {
+                const imagesHTML = article.images.map(img => `
+                    <figure class="my-8">
+                        <div style="width: ${img.width || '100%'}; height: ${img.height || 'auto'}; min-height: 200px; display: flex; align-items: center; justify-content: center; background-color: #F2EFE9; border-radius: 0.5rem; overflow: hidden;">
+                            <img src="${img.src}" 
+                                 alt="${img.alt || '文章图片'}" 
+                                 width="${img.width || '100%'}" 
+                                 height="${img.height || 'auto'}" 
+                                 class="rounded-lg shadow-md max-w-full h-auto opacity-0 transition-opacity duration-500 ease-in-out"
+                                 onerror="this.src='../Picture/default-placeholder.jpg'; this.alt='图片加载失败'; this.classList.add('opacity-100');"
+                                 onload="this.classList.add('opacity-100');">
+                        </div>
+                        ${img.alt ? `<figcaption class="text-center text-xs text-morandi-muted mt-2">${img.alt}</figcaption>` : ''}
+                    </figure>
+                `).join('');
+                contentHTML = imagesHTML + contentHTML;
+            }
+            
+            document.getElementById('reader-body').innerHTML = contentHTML;
+
+            panel.classList.remove('translate-x-full');
+            if (window.innerWidth > 1024) {
+                main.style.marginRight = "45%";
+            } else if (window.innerWidth > 768) {
+                main.style.marginRight = "50%";
+            }
+        };
+
+        window.closeReader = () => {
+            const panel = document.getElementById('reader-panel');
+            const main = document.getElementById('main-content');
+            panel.classList.add('translate-x-full');
+            main.style.marginRight = "0";
+        };
+
+        // --- 标注功能 ---
+        function setupHighlighter() {
+            const btn = document.getElementById('highlight-btn');
+            const reader = document.getElementById('reader-content');
+
+            reader.onmouseup = (e) => {
+                const selection = window.getSelection();
+                const text = selection.toString().trim();
+                if (text) {
+                    const range = selection.getRangeAt(0);
+                    const rect = range.getBoundingClientRect();
+                    btn.style.left = `${rect.left + rect.width/2}px`;
+                    btn.style.top = `${rect.top}px`;
+                    btn.classList.remove('hidden');
+                    btn.onclick = (event) => {
+                        event.stopPropagation();
+                        const span = document.createElement('span');
+                        span.className = 'user-highlight';
+                        span.innerText = text;
+                        range.deleteContents();
+                        range.insertNode(span);
+                        btn.classList.add('hidden');
+                        window.getSelection().removeAllRanges();
+                    };
+                } else {
+                    btn.classList.add('hidden');
+                }
+            };
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目呈现 | AI + 新媒体自动化系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #00ff88;
+            --neon-purple: #bc13fe;
+            --neon-blue: #00d2ff;
+            --cyber-black: #050505;
+            --card-bg: rgba(20, 20, 20, 0.9);
+            --border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            background-color: var(--cyber-black);
+            color: #e0e0e0;
+            font-family: 'Noto Sans SC', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .handwriting { font-family: 'Zhi Mang Xing', cursive; }
+
+        /* 赛博故障标题 */
+        .glitch-title {
+            position: relative;
+            color: white;
+            text-transform: uppercase;
+        }
+        .glitch-title::before, .glitch-title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .glitch-title::before {
+            left: 2px;
+            text-shadow: -1px 0 var(--neon-purple);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        .glitch-title::after {
+            left: -2px;
+            text-shadow: -1px 0 var(--neon-blue);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 30px, 0); transform: skew(0.5deg); }
+            20% { clip: rect(80px, 9999px, 90px, 0); transform: skew(0.1deg); }
+            100% { clip: rect(40px, 9999px, 60px, 0); transform: skew(0.5deg); }
+        }
+        @keyframes glitch-anim2 {
+            0% { clip: rect(60px, 9999px, 70px, 0); transform: skew(0.2deg); }
+            20% { clip: rect(20px, 9999px, 30px, 0); transform: skew(0.6deg); }
+            100% { clip: rect(90px, 9999px, 100px, 0); transform: skew(0.2deg); }
+        }
+
+        /* 霓虹卡片 */
+        .neon-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.05);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .neon-card:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+            transform: translateY(-5px) scale(1.01);
+        }
+
+        /* 标签贴纸效果 */
+        .sticker {
+            transform: rotate(-2deg);
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .sticker:hover { transform: rotate(0deg) scale(1.1); }
+
+        /* 滚动文字条 */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            position: absolute;
+            opacity: 0.1;
+            font-size: 8rem;
+            font-weight: 900;
+            top: 20%;
+            pointer-events: none;
+        }
+
+        /* 响应式调整 */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-green); border-radius: 4px; }
+    </style>
+</head>
+<body class="p-4 md:p-8 selection:bg-purple-500 selection:text-white">
+
+    <!-- 背景大字装饰 -->
+    <div class="marquee-container orbitron">
+        WORKFLOW OPTIMIZATION SYSTEM LOGIC 
+    </div>
+
+    <!-- 顶部状态栏 -->
+    <div class="fixed top-0 left-0 w-full bg-black/80 backdrop-blur border-b border-gray-800 z-50 px-6 py-2 flex justify-between items-center text-[10px] mono text-emerald-500">
+        <div>System: AI_Digital_Marketing_V1.0</div>
+        <div class="hidden md:block">Process: Human_AI_Symbiosis</div>
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Online</span>
+        </div>
+    </div>
+
+    <!-- 标题区 Hero -->
+    <header class="max-w-6xl mx-auto mt-24 mb-32 grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative">
+        <div class="md:col-span-8 z-10 reveal">
+            <!-- 标签组 -->
+            <div class="flex gap-4 mb-6 flex-wrap">
+                <span class="sticker bg-yellow-400 text-black px-3 py-1 font-bold text-xs uppercase">从概念到落地</span>
+                <span class="sticker bg-purple-500 text-white px-3 py-1 font-bold text-xs uppercase">全工作流程拆解</span>
+                <span class="sticker bg-red-500 text-white px-3 py-1 font-bold text-xs uppercase">人机协作哲学</span>
+            </div>
+            
+            <h1 class="orbitron font-black text-5xl md:text-8xl mb-6 leading-tight glitch-title" data-text="ALCHEMY">
+                流量炼金术<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-500">AI+新媒体运营</span>
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl leading-relaxed font-light">
+                这不是关于如何做一个账号或者一个矩阵，而是关于<span class="text-white font-bold border-b border-purple-500">如何构建一套系统</span>。我将实践的经验，解构为 Coze + 飞书的自动化产线。
+            </p>
+        </div>
+
+        <div class="md:col-span-4 z-10 reveal transition-delay-200">
+            <div class="neon-card p-6 relative group">
+                <div class="absolute -top-3 -right-3 bg-white text-black font-bold px-2 py-1 transform rotate-12 z-20 text-xs shadow-lg">CORE LOGIC</div>
+                <div class="font-mono text-xs text-emerald-500 mb-4 border-b border-gray-700 pb-2">
+                    // 核心架构思维导图
+                </div>
+                <ul class="space-y-3 text-sm font-bold text-gray-300 mb-6">
+                    <li class="flex items-center gap-2">
+                        <span class="text-purple-500">➜</span> 
+                        <span>设计方案:</span> 
+                        <span class="text-gray-500 font-normal text-xs">是工具、数据库也是经验积累的图书馆</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-blue-500">➜</span> 
+                        <span>智能体拆解:</span> 
+                        <span class="text-gray-500 font-normal text-xs">各司其职，低效输入，高效输出</span>
+                    </li>
+                </ul>
+                
+                <!-- 图片滑动组件 -->
+                <div class="bg-white rounded-lg overflow-hidden relative">
+                    <div class="slider-container relative overflow-hidden">
+                        <div class="slider-track flex transition-transform duration-500 ease-in-out">
+                            <div class="slider-item flex-shrink-0 w-full p-2">
+                                <img src="https://i.postimg.cc/kVYns0Rh/board1.png" alt="架构图1" class="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity" onclick="openModal(this.src)">
+                            </div>
+                            <div class="slider-item flex-shrink-0 w-full p-2">
+                                <img src="https://i.postimg.cc/d7Nq6bZG/board2.png" alt="架构图2" class="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity" onclick="openModal(this.src)">
+                            </div>
+                        </div>
+                        
+                        <!-- 滑动控制按钮 -->
+                        <button class="slider-btn slider-btn-left absolute top-1/2 left-2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors">
+                            ❮
+                        </button>
+                        <button class="slider-btn slider-btn-right absolute top-1/2 right-2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors">
+                            ❯
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto space-y-32">
+
+        <!-- 板块 1: 暴力美学 (The Hook) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start reveal">
+            <div class="prose prose-invert">
+                <h2 class="orbitron text-3xl font-bold mb-6 text-white flex items-center">
+                    <span class="text-purple-500 mr-4">#01</span> 
+                    运营美学<br>流量激素论&垂直经营逻辑
+                </h2>
+                <div class="p-4 bg-purple-900/20 border-l-4 border-purple-500 mb-6">
+                    <p class="text-gray-300 italic m-0">
+                        “所有账号的内容和运营策略可以归类、比喻为三种生理激素带来的影响，多巴胺、内啡肽和催产素。”
+                    </p>
+                </div>
+                <p class="text-gray-400">
+                    我选择了<strong class="text-white">即梦</strong> 作为审美担当。测试过很多模型，我总结的经验是，对于当下的AIGC设计师，选品比技术更重要。<span class="text-emerald-400">“品”</span>指的是懂得和不同的模型打交道，有审美，懂潮流。而对于规模化AIGC内容生产，我的核心发现是：<span class="text-emerald-400">Simple is Stable</span>。
+                </p>
+                <p class="text-gray-400">
+                    越稳定、越简单的提示词，模型的“幻觉”越少，批量生成的良品率越高。在这一点基础上，创新一套可以复刻套路的视觉模版，就能从0快速起号。
+                </p>
+            </div>
+            
+            <!-- 视觉展示区 -->
+            <div class="grid grid-cols-2 gap-4 relative">
+                <div class="aspect-[3/4] bg-gray-900 border border-gray-800 flex flex-col items-center justify-center p-4 neon-card bg-cover bg-top" style="background-image: url('https://i.postimg.cc/GHPdV8s4/zhang-hao-zhan-shi1.jpg')">
+                    <p class="text-center text-xs mt-2 font-bold text-red-500">核心视觉元素：动物下跪</p>
+                </div>
+                <div class="aspect-[3/4] bg-gray-900 border border-gray-800 flex flex-col items-center justify-center p-4 neon-card mt-8 bg-cover bg-top" style="background-image: url('https://i.postimg.cc/PCtTjXmg/zhang-hao-zhan-shi2.jpg')">
+                    <p class="text-center text-xs mt-2 font-bold text-red-500">核心视觉元素：生肖画实体化</p>
+                </div>
+                <!-- 浮动标签 -->
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-400 text-black font-bold px-4 py-2 rotate-12 shadow-xl whitespace-nowrap z-10 text-sm">
+                    零☞千粉案例
+                </div>
+            </div>
+        </section>
+
+        <!-- 板块 2: 系统架构 (The Architecture) -->
+        <section class="reveal">
+            <div class="border-t border-gray-800 pt-8 mb-8 flex justify-between items-end">
+                <h2 class="orbitron text-4xl md:text-5xl font-bold text-white">#2  Cozen×飞书设计</h2>
+                <span class="mono text-xs text-emerald-500">AUTO_WORKFLOW_V1.0</span>
+            </div>
+
+            <div class="neon-card p-8 md:p-12 relative overflow-hidden bg-black">
+                <!-- 背景网格 -->
+                <div class="absolute inset-0 bg-[linear-gradient(rgba(0,255,136,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,136,0.1)_1px,transparent_1px)] bg-[size:20px_20px] opacity-20"></div>
+
+                <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <!-- 环节 1 -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full bg-black border-2 border-purple-500 flex items-center justify-center text-2xl mb-4 shadow-[0_0_15px_#a855f7]">🧠</div>
+                        <h3 class="orbitron font-bold text-xl mb-2 text-white">Coze Agent</h3>
+                        <p class="text-xs text-gray-400 font-mono">逻辑处理器</p>
+                        <p class="text-sm text-gray-500 mt-2">结构化人的零散语言<br>加工经验，减少脑力损耗</p>
+                    </div>
+
+                    <!-- 链接符 -->
+                    <div class="hidden md:flex items-center justify-center">
+                        <div class="w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500 relative">
+                            <div class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-black px-2 text-xs font-mono text-gray-500">API LINK</div>
+                        </div>
+                    </div>
+
+                    <!-- 环节 2 -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full bg-black border-2 border-blue-500 flex items-center justify-center text-2xl mb-4 shadow-[0_0_15px_#3b82f6]">💾</div>
+                        <h3 class="orbitron font-bold text-xl mb-2 text-white">飞书 Base</h3>
+                        <p class="text-xs text-gray-400 font-mono">数据中台</p>
+                        <p class="text-sm text-gray-500 mt-2">
+                            <span class="inline-block bg-gray-800 px-1 rounded mx-1">总看板</span>
+                            <span class="inline-block bg-gray-800 px-1 rounded mx-1">素材库</span>
+                            <span class="inline-block bg-gray-800 px-1 rounded mx-1">SOP周报</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 哲学思考 -->
+                <div class="mt-12 p-6 border border-dashed border-gray-700 rounded bg-gray-900/50 text-left">
+                    <span class="text-emerald-500 font-mono text-xs block mb-2">> PHILOSOPHY.txt</span>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        “在这个系统中，人与 Agent 的关系被重新定义：<br>
+                        <span class="text-white font-bold">Agent</span> 是秘书、智脑和美工。<br>
+                        <span class="text-white font-bold">人</span> 负责反思复盘、赋予意义与最终决策。<br>
+                        这就是我理解的 <span class="text-purple-400">Human-in-the-loop</span>。”
+                    </p>
+                </div>
+
+                <!-- 添加飞书系统访问模块 -->
+                <div class="mt-8 neon-card p-8 rounded-xl bg-black border-2 border-blue-500 relative overflow-hidden">
+                    <!-- 背景网格 -->
+                    <div class="absolute inset-0 bg-[linear-gradient(rgba(0,255,136,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,136,0.1)_1px,transparent_1px)] bg-[size:20px_20px] opacity-20"></div>
+                    
+                    <!-- 标题 -->
+                    <h3 class="orbitron text-2xl font-bold text-white flex items-center gap-2 relative z-10 mb-6">
+                        <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+                        </svg>
+                        访问飞书系统
+                    </h3>
+                    
+                    <!-- 按钮 -->
+                    <div class="text-center relative z-10">
+                        <button id="open-feishu-modal" class="neon-button px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-lg hover:from-blue-500 hover:to-purple-500 transition-all duration-300 shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_25px_rgba(59,130,246,0.8)]">
+                            <span class="flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                                </svg>
+                                打开访问权限
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 飞书系统访问弹窗 -->
+                <div id="feishu-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 hidden transition-opacity duration-300">
+                    <div class="neon-card p-8 rounded-xl bg-black border-2 border-blue-500 max-w-md w-full mx-auto transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="orbitron text-2xl font-bold text-white flex items-center gap-2">
+                                <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+                                </svg>
+                                飞书系统访问
+                            </h3>
+                            <button id="close-modal" class="text-gray-400 hover:text-white transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="space-y-6">
+                            <!-- 飞书链接 -->
+                            <div>
+                                <label class="block text-sm font-mono text-gray-400 mb-2">飞书系统链接</label>
+                                <a href="https://ai.feishu.cn/base/L0xkbbmtRam12TsFMQAcEgPLnsB?from=from_copylink" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 bg-gray-800 rounded-lg text-blue-400 hover:text-blue-300 transition-colors border border-blue-900 hover:border-blue-700">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm">https://ai.feishu.cn/base/L0xkbbmtRam12TsFMQAcEgPLnsB</span>
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- 密码复制 -->
+                            <div>
+                                <label class="block text-sm font-mono text-gray-400 mb-2">系统密码</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" value="29@M9592" readonly class="flex-1 px-4 py-3 bg-gray-800 rounded-lg text-white font-mono border border-gray-700">
+                                    <button id="copy-password" class="px-4 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors border border-blue-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <span id="copy-success" class="hidden text-sm text-emerald-500 font-mono mt-2 block">密码已复制到剪贴板！</span>
+                            </div>
+
+                            <!-- 提示信息 -->
+                            <div class="p-4 bg-gray-800 rounded-lg border border-gray-700">
+                                <p class="text-xs text-gray-400">
+                                    <svg class="w-4 h-4 inline mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    请妥善保管密码，访问后请及时关闭页面
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 板块 3: 数据策略 (The Strategy) -->
+        <section class="grid grid-cols-1 md:grid-cols-12 gap-8 reveal">
+            <!-- 左侧：爬虫 -->
+            <div class="md:col-span-5 flex flex-col justify-center">
+                <div class="bg-gray-900 border border-gray-800 p-6 rounded-lg relative">
+                    <div class="absolute -top-3 left-4 bg-emerald-500 text-black px-2 text-xs font-bold">TOOL: AUTOMA</div>
+                    <h3 class="font-bold text-2xl text-white mb-4 mt-2">#3  数据猎人</h3>
+                    <p class="text-gray-400 text-xl mb-4">
+                        什么数据重要？什么数据可以得到想要的结论？数据可以怎么解释？以下办法让我从互联网小白逐渐入门。
+                    </p>
+                    <div class="space-y-2 font-mono text-l text-emerald-400/80">
+                        <div>> √用Automa写迷你工具爬取小红书数据</div>
+                        <div>> √自学网络资料，将数据分层，提高颗粒度</div>
+                        <div>> √用自创的四阶段提示词Deep Rechearch数据快速得到结论（请查看👉）</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：提示词终端 -->
+            <div class="md:col-span-7">
+                <div class="bg-[#1e1e1e] rounded-t-lg border-b border-gray-700 p-3 flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span class="ml-auto text-xs text-gray-500 font-mono">四阶段提示词</span>
+                </div>
+                <div class="bg-[#121212] p-6 font-mono text-sm text-gray-300 h-[400px] overflow-y-auto border-x border-b border-gray-800 shadow-2xl custom-scrollbar relative">
+                    
+                    <div class="text-purple-400 font-bold mb-2"># ROLE: 资深小红书增长策略师</div>
+                    <div class="text-gray-500 mb-6 text-xs">对应阶段数据 + 提示词 → 可视化报告</div>
+
+                    <!-- 阶段展示 -->
+                    <div class="border-l-2 border-emerald-500 pl-4 mb-6">
+                        <span class="text-emerald-500 font-bold text-xs">PHASE 01: MACRO</span>
+                        <p class="text-white font-bold">宏观内容生态分析</p>
+                        <p class="text-xs text-gray-500 mt-1">关键词检索 / 赛道拥挤度 / 蓝海识别</p>
+                    </div>
+
+                    <div class="border-l-2 border-emerald-500 pl-4 mb-6">
+                        <span class="text-emerald-500 font-bold text-xs">PHASE 02: MICRO</span>
+                        <p class="text-white font-bold">微观账号策略拆解</p>
+                        <p class="text-xs text-gray-500 mt-1">爆款逐帧拆解 / 视觉钩子提取</p>
+                    </div>
+
+                    <div class="border-l-2 border-emerald-500 pl-4 mb-6">
+                        <span class="text-emerald-500 font-bold text-xs">PHASE 03: USER</span>
+                        <p class="text-white font-bold">核心用户群体画像</p>
+                        <p class="text-xs text-gray-500 mt-1">基于评论区爬虫数据的痛点反推</p>
+                    </div>
+
+                    <div class="border-l-2 border-emerald-500 pl-4 mb-6">
+                        <span class="text-emerald-500 font-bold text-xs">PHASE 04: STRATEGY</span>
+                        <p class="text-white font-bold">综合增长策略制定</p>
+                        <p class="text-xs text-gray-500 mt-1">输出全流程 SOP 与执行表</p>
+                    </div>
+
+                    <div class="mt-8 pt-8 border-t border-dashed border-gray-800">
+                        <div class="flex items-center gap-2 text-xs text-gray-500">
+                                                     </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 总结 Footer -->
+        <footer class="text-center pb-24 border-t border-gray-800 pt-16 reveal">
+            <h2 class="orbitron text-2xl font-bold text-white mb-6">CORE COMPETENCY</h2>
+            <p class="max-w-xl mx-auto text-gray-400 mb-8">
+                这段经历最大的价值，不在于我做起了千粉账号，而在于我验证了<br>
+                <span class="text-white font-bold">“如何用 AI + 低代码工具重构工作流”</span>。<br>
+                这种从混沌到秩序的搭建能力，是可以迁移到任何产品与运营场景的。
+            </p>
+            <div class="flex justify-center gap-4 text-[10px] font-mono text-emerald-600 uppercase tracking-widest">
+                <span>Problem Solving</span>
+                <span>System Design</span>
+                <span>Process Optimization</span>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- 飞书系统访问弹窗 -->
+    <div id="feishu-modal-body" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 hidden transition-opacity duration-300">
+        <div class="neon-card p-8 rounded-xl bg-black border-2 border-blue-500 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content-body">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="orbitron text-2xl font-bold text-white flex items-center gap-2">
+                    <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+                    </svg>
+                    飞书系统访问
+                </h3>
+                <button id="close-modal" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <!-- 飞书链接 -->
+                <div>
+                    <label class="block text-sm font-mono text-gray-400 mb-2">飞书系统链接</label>
+                    <a href="https://ai.feishu.cn/base/L0xkbbmtRam12TsFMQAcEgPLnsB?from=from_copylink" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 bg-gray-800 rounded-lg text-blue-400 hover:text-blue-300 transition-colors border border-blue-900 hover:border-blue-700">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">https://ai.feishu.cn/base/L0xkbbmtRam12TsFMQAcEgPLnsB</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 密码复制 -->
+                <div>
+                    <label class="block text-sm font-mono text-gray-400 mb-2">系统密码</label>
+                    <div class="flex items-center gap-2">
+                        <input type="text" value="29@M9592" readonly class="flex-1 px-4 py-3 bg-gray-800 rounded-lg text-white font-mono border border-gray-700">
+                        <button id="copy-password" class="px-4 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors border border-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <span id="copy-success" class="hidden text-sm text-emerald-500 font-mono mt-2 block">密码已复制到剪贴板！</span>
+                </div>
+
+                <!-- 提示信息 -->
+                <div class="p-4 bg-gray-800 rounded-lg border border-gray-700">
+                    <p class="text-xs text-gray-400">
+                        <svg class="w-4 h-4 inline mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        请妥善保管密码，访问后请及时关闭页面
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片弹窗 -->
+    <div id="imageModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center hidden">
+        <div class="relative max-w-4xl max-h-[90vh]">
+            <img id="modalImage" src="" alt="放大图片" class="max-w-full max-h-[90vh] rounded-lg">
+            <button id="closeModal" class="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors">
+                ✕
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 简单的滚动显现逻辑
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 图片滑动功能
+        const sliderTrack = document.querySelector('.slider-track');
+        const sliderItems = document.querySelectorAll('.slider-item');
+        const btnLeft = document.querySelector('.slider-btn-left');
+        const btnRight = document.querySelector('.slider-btn-right');
+        let currentIndex = 0;
+        const totalItems = sliderItems.length;
+
+        function updateSlider() {
+            const slideWidth = sliderItems[0].clientWidth;
+            sliderTrack.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        }
+
+        btnRight.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateSlider();
+        });
+
+        btnLeft.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            updateSlider();
+        });
+
+        // 窗口大小变化时更新滑动位置
+        window.addEventListener('resize', updateSlider);
+
+        // 初始化滑动位置
+        updateSlider();
+
+        // 图片弹窗功能
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const closeModal = document.getElementById('closeModal');
+
+        function openModal(src) {
+            modalImage.src = src;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModalFunc() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        closeModal.addEventListener('click', closeModalFunc);
+
+        // 点击弹窗外部关闭弹窗
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModalFunc();
+            }
+        });
+
+        // ESC键关闭弹窗
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModalFunc();
+            }
+        });
+
+        // 飞书系统访问弹窗功能
+        document.addEventListener('DOMContentLoaded', () => {
+            const feishuModal = document.getElementById('feishu-modal-body');
+            const modalContent = document.getElementById('modal-content-body');
+            const openModalBtn = document.getElementById('open-feishu-modal');
+            const closeModalBtn = document.querySelector('#feishu-modal-body #close-modal');
+            const copyPasswordBtn = document.querySelector('#feishu-modal-body #copy-password');
+            const copySuccessMsg = document.querySelector('#feishu-modal-body #copy-success');
+
+            // 打开弹窗
+            function openFeishuModal() {
+                feishuModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                
+                // 添加动画效果
+                setTimeout(() => {
+                    feishuModal.style.opacity = '1';
+                    modalContent.style.transform = 'scale(1)';
+                    modalContent.style.opacity = '1';
+                }, 10);
+            }
+
+            // 关闭弹窗
+            function closeFeishuModal() {
+                feishuModal.style.opacity = '0';
+                modalContent.style.transform = 'scale(0.95)';
+                modalContent.style.opacity = '0';
+                
+                // 等待动画完成后隐藏元素
+                setTimeout(() => {
+                    feishuModal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+
+            // 复制密码功能
+            function copyPassword() {
+                const passwordInput = document.querySelector('input[value="29@M9592"]');
+                passwordInput.select();
+                passwordInput.setSelectionRange(0, 99999);
+                
+                try {
+                    document.execCommand('copy');
+                    copySuccessMsg.classList.remove('hidden');
+                    
+                    // 3秒后隐藏成功提示
+                    setTimeout(() => {
+                        copySuccessMsg.classList.add('hidden');
+                    }, 3000);
+                } catch (err) {
+                    console.error('复制失败:', err);
+                }
+            }
+
+            // 事件监听
+            openModalBtn.addEventListener('click', openFeishuModal);
+            closeModalBtn.addEventListener('click', closeFeishuModal);
+            copyPasswordBtn.addEventListener('click', copyPassword);
+
+            // 点击弹窗外部关闭弹窗
+            feishuModal.addEventListener('click', (e) => {
+                if (e.target === feishuModal) {
+                    closeFeishuModal();
+                }
+            });
+
+            // ESC键关闭飞书弹窗
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !feishuModal.classList.contains('hidden')) {
+                    closeFeishuModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

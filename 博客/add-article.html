@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加新文章 - Morandi Blog</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        morandi: {
+                            bg: '#F2EFE9',
+                            card: '#FEFCF8',
+                            text: '#4A4E69',
+                            muted: '#9A8C98',
+                            green: '#A3B18A',
+                            blue: '#8E9AAF',
+                            pink: '#D4A373',
+                            border: '#E0DCD3'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif SC"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F2EFE9;
+            color: #4A4E69;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .smooth-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .article-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(74, 78, 105, 0.15);
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .editor-content {
+            min-height: 300px;
+        }
+
+        .tag-input {
+            display: inline-block;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        .notification {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- 页面头部 -->
+    <header class="bg-morandi-card border-b border-morandi-border/50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="h-16 flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-morandi-green rounded-lg flex items-center justify-center text-white shrink-0">
+                        <i class="fas fa-leaf text-sm"></i>
+                    </div>
+                    <span class="ml-3 font-serif font-bold text-lg">Morandi.</span>
+                    <span class="ml-4 text-sm text-morandi-muted">/ 添加新文章</span>
+                </div>
+                <div>
+                    <a href="博客界面.html" class="text-morandi-text hover:text-morandi-green transition-colors flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span>返回博客</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 通知区域 -->
+        <div id="notification" class="notification fixed top-4 right-4 bg-white shadow-lg rounded-lg px-6 py-4 z-50 hidden">
+            <div class="flex items-center">
+                <i id="notification-icon" class="fas mr-3 text-xl"></i>
+                <span id="notification-message"></span>
+                <button onclick="closeNotification()" class="ml-auto text-morandi-muted hover:text-morandi-text"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+
+        <!-- 表单区域 -->
+        <div class="bg-morandi-card rounded-2xl border border-morandi-border/40 shadow-sm p-8 mb-8">
+            <h2 class="font-serif text-2xl text-morandi-text font-bold mb-6">创作新文章</h2>
+            
+            <form id="article-form" class="space-y-6">
+                <!-- 标题 -->
+                <div>
+                    <label for="title" class="block text-sm font-medium text-morandi-text mb-2">文章标题</label>
+                    <input type="text" id="title" name="title" placeholder="请输入文章标题" class="w-full bg-morandi-bg border border-morandi-border rounded-lg py-3 px-4 focus:ring-2 focus:ring-morandi-green focus:border-transparent outline-none">
+                    <p id="title-error" class="mt-1 text-sm text-red-500 hidden">标题不能为空</p>
+                </div>
+
+                <!-- 日期 -->
+                <div>
+                    <label for="date" class="block text-sm font-medium text-morandi-text mb-2">发布日期</label>
+                    <input type="date" id="date" name="date" class="w-full bg-morandi-bg border border-morandi-border rounded-lg py-3 px-4 focus:ring-2 focus:ring-morandi-green focus:border-transparent outline-none">
+                </div>
+
+                <!-- 标签 -->
+                <div>
+                    <label class="block text-sm font-medium text-morandi-text mb-2">标签</label>
+                    <div class="flex flex-wrap gap-2">
+                        <input type="text" id="tag-input" placeholder="输入标签并按回车" class="bg-morandi-bg border border-morandi-border rounded-lg py-2 px-4 focus:ring-2 focus:ring-morandi-green focus:border-transparent outline-none">
+                        <button type="button" onclick="addTag()" class="bg-morandi-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <div id="tags-container" class="mt-3 flex flex-wrap gap-2"></div>
+                    <input type="hidden" id="tags" name="tags" value="[]">
+                    <p id="tags-error" class="mt-1 text-sm text-red-500 hidden">请至少添加一个标签</p>
+                </div>
+
+                <!-- 预览 -->
+                <div>
+                    <label for="preview" class="block text-sm font-medium text-morandi-text mb-2">文章预览</label>
+                    <textarea id="preview" name="preview" placeholder="请输入文章预览（用于文章列表显示）" rows="3" class="w-full bg-morandi-bg border border-morandi-border rounded-lg py-3 px-4 focus:ring-2 focus:ring-morandi-green focus:border-transparent outline-none resize-none"></textarea>
+                    <p id="preview-error" class="mt-1 text-sm text-red-500 hidden">预览不能为空</p>
+                </div>
+
+                <!-- 内容 -->
+                <div>
+                    <label for="content" class="block text-sm font-medium text-morandi-text mb-2">文章内容</label>
+                    <textarea id="content" name="content" placeholder="请输入文章内容" rows="10" class="w-full bg-morandi-bg border border-morandi-border rounded-lg py-3 px-4 focus:ring-2 focus:ring-morandi-green focus:border-transparent outline-none resize-vertical editor-content"></textarea>
+                    <p id="content-error" class="mt-1 text-sm text-red-500 hidden">内容不能为空</p>
+                </div>
+
+                <!-- 按钮区域 -->
+                <div class="flex flex-wrap gap-4">
+                    <button type="button" onclick="showPreview()" class="bg-morandi-blue text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors flex items-center justify-center">
+                        <i class="fas fa-eye mr-2"></i>
+                        <span>预览</span>
+                    </button>
+                    <button type="button" onclick="publishArticle()" class="bg-morandi-green text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors flex items-center justify-center">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        <span>发布</span>
+                    </button>
+                </div>
+
+                <!-- 代码生成区域 -->
+                <div id="code-section" class="bg-morandi-bg border border-morandi-border rounded-xl p-4 hidden">
+                    <h3 class="text-sm font-medium text-morandi-text mb-2">生成的文章代码</h3>
+                    <div class="flex items-center gap-3">
+                        <textarea id="article-code" class="flex-1 bg-white border border-morandi-border rounded-lg p-3 text-sm font-mono resize-none h-20" readonly></textarea>
+                        <button onclick="copyCode()" class="bg-morandi-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors flex items-center justify-center whitespace-nowrap">
+                            <i class="fas fa-copy mr-2"></i>
+                            <span>复制代码</span>
+                        </button>
+                    </div>
+                    <p class="mt-2 text-xs text-morandi-muted">请将复制的代码粘贴到 articles.json 文件中</p>
+                </div>
+            </form>
+        </div>
+
+        <!-- 预览区域 -->
+        <div id="preview-section" class="bg-morandi-card rounded-2xl border border-morandi-border/40 shadow-sm p-8 hidden">
+            <h2 class="font-serif text-2xl text-morandi-text font-bold mb-6">文章预览</h2>
+            <div class="article-card bg-morandi-bg p-8 rounded-xl">
+                <div id="preview-tags" class="flex gap-2 mb-3"></div>
+                <h3 id="preview-title" class="font-serif text-xl font-bold text-morandi-text mb-4"></h3>
+                <div id="preview-meta" class="text-sm text-morandi-muted mb-6"></div>
+                <p id="preview-preview" class="text-morandi-text mb-8 line-clamp-3"></p>
+                <div id="preview-content" class="text-morandi-text space-y-4 border-t border-morandi-border pt-6"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 全局变量
+        let tags = [];
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置当前日期
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+            
+            // 设置标签输入框的回车事件
+            document.getElementById('tag-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addTag();
+                }
+            });
+        });
+
+        // 添加标签
+        function addTag() {
+            const tagInput = document.getElementById('tag-input');
+            const tag = tagInput.value.trim();
+            
+            if (tag && !tags.includes(tag)) {
+                tags.push(tag);
+                updateTagsDisplay();
+                tagInput.value = '';
+            }
+        }
+
+        // 移除标签
+        function removeTag(tag) {
+            tags = tags.filter(t => t !== tag);
+            updateTagsDisplay();
+        }
+
+        // 更新标签显示
+        function updateTagsDisplay() {
+            const container = document.getElementById('tags-container');
+            const hiddenInput = document.getElementById('tags');
+            
+            container.innerHTML = tags.map(tag => `
+                <div class="tag-input bg-morandi-bg border border-morandi-border rounded-full px-3 py-1 text-sm flex items-center">
+                    <span>${tag}</span>
+                    <button type="button" onclick="removeTag('${tag}')" class="ml-2 text-morandi-muted hover:text-morandi-text"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+            
+            hiddenInput.value = JSON.stringify(tags);
+        }
+
+        // 显示通知
+        function showNotification(type, message) {
+            const notification = document.getElementById('notification');
+            const icon = document.getElementById('notification-icon');
+            const messageEl = document.getElementById('notification-message');
+            
+            messageEl.textContent = message;
+            
+            if (type === 'success') {
+                notification.className = 'notification fixed top-4 right-4 bg-green-50 border border-green-200 text-green-800 shadow-lg rounded-lg px-6 py-4 z-50';
+                icon.className = 'fas fa-check-circle mr-3 text-xl text-green-500';
+            } else {
+                notification.className = 'notification fixed top-4 right-4 bg-red-50 border border-red-200 text-red-800 shadow-lg rounded-lg px-6 py-4 z-50';
+                icon.className = 'fas fa-exclamation-circle mr-3 text-xl text-red-500';
+            }
+            
+            notification.classList.remove('hidden');
+            notification.classList.add('opacity-100', 'translate-y-0');
+            
+            // 3秒后自动关闭
+            setTimeout(() => {
+                closeNotification();
+            }, 3000);
+        }
+
+        // 关闭通知
+        function closeNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('hidden');
+        }
+
+        // 表单验证
+        function validateForm() {
+            let isValid = true;
+            
+            // 清除之前的错误
+            document.querySelectorAll('.text-red-500').forEach(el => el.classList.add('hidden'));
+            
+            // 验证标题
+            const title = document.getElementById('title').value.trim();
+            if (!title) {
+                document.getElementById('title-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // 验证标签
+            if (tags.length === 0) {
+                document.getElementById('tags-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // 验证预览
+            const preview = document.getElementById('preview').value.trim();
+            if (!preview) {
+                document.getElementById('preview-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // 验证内容
+            const content = document.getElementById('content').value.trim();
+            if (!content) {
+                document.getElementById('content-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        // 显示预览
+        function showPreview() {
+            if (!validateForm()) {
+                return;
+            }
+            
+            const title = document.getElementById('title').value;
+            const date = document.getElementById('date').value;
+            const preview = document.getElementById('preview').value;
+            const content = document.getElementById('content').value;
+            
+            // 更新预览区域
+            document.getElementById('preview-title').textContent = title;
+            document.getElementById('preview-meta').textContent = date;
+            document.getElementById('preview-preview').textContent = preview;
+            document.getElementById('preview-content').innerHTML = content.replace(/\n/g, '<br>');
+            
+            // 更新预览标签
+            const previewTagsContainer = document.getElementById('preview-tags');
+            previewTagsContainer.innerHTML = tags.map(tag => `
+                <span class="text-[9px] text-morandi-muted bg-morandi-bg px-2 py-0.5 rounded tracking-tighter">#${tag}</span>
+            `).join('');
+            
+            // 显示预览区域
+            const previewSection = document.getElementById('preview-section');
+            previewSection.classList.remove('hidden');
+            previewSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 发布文章
+        function publishArticle() {
+            if (!validateForm()) {
+                return;
+            }
+            
+            // 获取表单数据
+            const title = document.getElementById('title').value.trim();
+            const date = document.getElementById('date').value;
+            const preview = document.getElementById('preview').value.trim();
+            const content = document.getElementById('content').value.trim();
+            
+            try {
+                // 使用时间戳生成唯一ID
+                const newId = Math.floor(Date.now() / 1000);
+                
+                // 创建新文章对象（保持与articles.json一致的字段顺序）
+                const newArticle = {
+                    id: newId,
+                    title: title,
+                    date: date,
+                    tags: tags,
+                    preview: preview,
+                    content: content.replace(/\n/g, '<br>')
+                };
+                
+                // 将文章对象转换为JSON字符串（带缩进格式）
+                const articleJson = JSON.stringify(newArticle, null, 2);
+                
+                // 显示代码生成区域
+                const codeSection = document.getElementById('code-section');
+                const codeTextarea = document.getElementById('article-code');
+                
+                codeTextarea.value = articleJson;
+                codeSection.classList.remove('hidden');
+                codeSection.scrollIntoView({ behavior: 'smooth' });
+                
+                // 显示成功消息
+                showNotification('success', '文章代码已生成，请复制并添加到 articles.json 文件中！');
+                
+            } catch (error) {
+                console.error('发布失败:', error);
+                showNotification('error', '文章发布失败，请重试！');
+            }
+        }
+
+        // 复制代码
+        function copyCode() {
+            const codeTextarea = document.getElementById('article-code');
+            codeTextarea.select();
+            document.execCommand('copy');
+            showNotification('success', '代码已复制到剪贴板！');
+        }
+    </script>
+</body>
+</html>

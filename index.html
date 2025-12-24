@@ -1,0 +1,3195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Product Portfolio</title>
+    <!-- 引入字体: 衬线体用于营造高级感 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- 引入画展所需的外部资源 -->
+    <link rel='stylesheet' href='https://unpkg.com/locomotive-scroll@4.0.6/dist/locomotive-scroll.min.css' />
+    <script src='https://unpkg.com/locomotive-scroll@4.0.6/dist/locomotive-scroll.min.js'></script>
+    
+    <style>
+        /* =========================================
+           1. 全局配置与变量 (Global Variables)
+           ========================================= */
+        :root {
+            /* 莫兰迪基础色盘 */
+            --bg-color: #FDFCF8;       /* 纸张白 */
+            --text-main: #2C2C2C;      /* 深灰墨色 */
+            --text-sub: #666666;       /* 次级灰 */
+            
+            /* 侧边栏键盘按钮颜色 (基于莫兰迪色系调整为键盘风格) */
+            /* 按钮1: 灰绿 */
+            --key-1-bg: #E0F2F1; --key-1-border: #80CBC4; --key-1-shadow: #4DB6AC;
+            /* 按钮2: 藕粉 */
+            --key-2-bg: #FCE4EC; --key-2-border: #F48FB1; --key-2-shadow: #F06292;
+            /* 按钮3: 雾蓝 */
+            --key-3-bg: #E8EAF6; --key-3-border: #9FA8DA; --key-3-shadow: #7986CB;
+            /* 按钮4: 暖褐 */
+            --key-4-bg: #EFEBE9; --key-4-border: #BCAAA4; --key-4-shadow: #8D6E63;
+            /* 按钮5: 鼠尾草 */
+            --key-5-bg: #E8F5E9; --key-5-border: #A5D6A7; --key-5-shadow: #66BB6A;
+
+            /* 尺寸变量 */
+            --sidebar-width: 100px; /* 侧边栏宽度加宽以容纳按钮 */
+            --mobile-nav-height: 70px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 标题样式 */
+        .font-title-cn {
+            font-family: 'Noto Serif SC', serif;
+        }
+        .font-title-en {
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.35em;
+        }
+        .title-container {
+            position: relative;
+            padding: 2rem 0;
+            display: inline-block;
+        }
+        /* 英文副标题样式 */
+        .title-container .font-title-en:first-of-type {
+            font-size: 10px; /* 移动端 */
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            color: #475569;
+            opacity: 0.8;
+        }
+        /* 副标题装饰线 */
+        .title-container .font-title-en:first-of-type span:first-child {
+            width: 32px;
+            height: 1px;
+            background-color: #1e293b;
+            opacity: 0.4;
+        }
+        @media (min-width: 768px) {
+            /* 英文副标题 */
+            .title-container .font-title-en:first-of-type {
+                font-size: 12px; /* 桌面端 */
+            }
+        }
+        /* 中文主标题 */
+        .title-container h1 {
+            font-size: 28px;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+            color: #1e293b;
+        }
+        /* 主标题行 */
+        .title-container h1 span.block {
+            display: block;
+        }
+        /* 主标题第二行 */
+        .title-container h1 span.block:last-child {
+            margin-left: 16px; /* 移动端 - 更靠左 */
+        }
+        @media (min-width: 768px) {
+            /* 主标题第二行 */
+            .title-container h1 span.block:last-child {
+                margin-left: 32px; /* 桌面端 - 更靠左 */
+            }
+        }
+        /* 垂直装饰文字容器 */
+        .title-container .relative > div:last-child {
+            position: absolute;
+            right: -24px;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+        }
+        /* 垂直装饰文字 */
+        .title-container .relative > div:last-child div {
+            font-size: 8px;
+            transform: rotate(90deg);
+            transform-origin: center;
+            color: #94a3b8;
+            white-space: nowrap;
+            letter-spacing: 1em;
+            font-weight: 700;
+        }
+        /* 旋转类 */
+        .rotate-90 {
+            transform: rotate(90deg);
+        }
+        /* 原点中心 */
+        .origin-center {
+            transform-origin: center;
+        }
+        /* 底部装饰线 */
+        .title-container > div:last-child {
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        /* 底部装饰线的渐变线 */
+        .title-container > div:last-child div:first-child {
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(to right, #1e293b, transparent);
+            opacity: 0.3;
+        }
+        /* 底部装饰线的文字 */
+        .title-container > div:last-child div:last-child {
+            font-size: 9px;
+            letter-spacing: 0.5em;
+            color: #64748b;
+            font-weight: 700;
+        }
+        /* 海洋主题渐变文本效果 - 更自然的蓝绿色调 */
+        .text-gradient-dark {
+            background: linear-gradient(135deg, #1e40af 0%, #166534 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* AI 词汇的海洋蓝绿色点缀 - 更柔和的蓝色 */
+        .char-accent-dark {
+            color: #F06292; /* 柔和的海蓝色 */
+            font-style: italic;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
+        }
+        /* 装饰元素颜色 */
+        .decoration-dark {
+            color: #164e63;
+            opacity: 0.8;
+        }
+        /* 移动端响应式 */
+        @media (min-width: 768px) {
+            /* 英文副标题 */
+            .title-container .font-title-en:first-of-type {
+                font-size: 12px;
+            }
+            /* 中文主标题 */
+            .title-container h1 {
+                font-size: 72px;
+            }
+            /* 主标题第二行 */
+            .title-container h1 span.block:last-child {
+                margin-left: 64px;
+            }
+        }
+
+        body {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            background:radial-gradient(ellipse at center, rgba(255,254,234,0.3) 0%, rgba(255,254,234,0.3) 35%, rgba(183, 232, 235, 0.3) 100%);
+            color: var(--text-main);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* 禁止整个网页滚动，内容在内部容器滚动 */
+            display: flex;
+            position: relative;
+        }
+
+        /* =========================================
+           2. 背景：海洋波浪效果 (Ocean Wave Effects)
+           ========================================= */
+        
+        .ocean {
+            height: 5%;
+            width: 100%;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            background: transparent;
+            z-index: 0;
+        }
+
+        .wave {
+            background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x;
+            position: absolute;
+            top: -158px;
+            width: 6400px;
+            height: 198px;
+            animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+            transform: translate3d(0, 0, 0);
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        .wave:nth-of-type(2) {
+            top: -135px;
+            animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) -.125s infinite, swell 7s ease -1.25s infinite;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        @keyframes wave {
+            0% {
+                margin-left: 0;
+            }
+            100% {
+                margin-left: -1600px;
+            }
+        }
+
+        @keyframes swell {
+            0%, 100% {
+                transform: translate3d(0,-25px,0);
+            }
+            50% {
+                transform: translate3d(0,5px,0);
+            }
+        }
+
+        /* =========================================
+           3. 标题样式 (Title Styles)
+           ========================================= */
+
+        .font-title-cn {
+            font-family: 'Noto Serif SC', serif;
+        }
+        .font-title-en {
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.35em;
+        }
+        .title-container {
+            position: relative;
+            padding: 2rem 0;
+            display: inline-block;
+        }
+        /* 海洋主题渐变文本效果 - 更自然的蓝绿色调 */
+        .text-gradient-dark {
+            background: linear-gradient(135deg, #1e40af 0%, #166534 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* AI 词汇的海洋蓝绿色点缀 - 更柔和的蓝色 */
+        .char-accent-dark {
+            color: #F06292; /* 柔和的海蓝色 */
+            font-style: italic;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
+        }
+        /* 装饰元素颜色 */
+        .decoration-dark {
+            color: #164e63;
+            opacity: 0.8;
+        }
+
+        /* =========================================
+           4. 侧边栏：键盘风格 (Keyboard Sidebar)
+           ========================================= */
+        .sidebar-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: stretch;
+            /* 去掉间距和内边距，让按钮填满整个容器 */
+            gap: 0;
+            padding: 0;
+            /* 侧边栏添加浅阴影效果 */
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 磨砂玻璃光影按钮样式 */
+        button.key-btn {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            outline: none;
+            border: 0;
+            vertical-align: middle;
+            text-decoration: none;
+            font-family: inherit;
+            font-size: 14px;
+            /* 按钮占据整个侧边栏的宽度和高度的1/5 */
+            width: 100%;
+            height: 20%;
+            background: transparent;
+            padding: 0;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        /* 按钮的主体面 */
+        button.key-btn .btn-face {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-weight: 600;
+            color: var(--text-main);
+            text-transform: uppercase;
+            /* 去掉圆角，让按钮之间无缝连接 */
+            border-radius: 0;
+            /* 磨砂玻璃效果 */
+            background: rgba(253, 252, 248, 0.95); /* 背景色加透明度 */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            /* 只添加左右边框，上下边框与相邻按钮共享 */
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
+            border-left: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+            
+            /* 竖向文字排列 */
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 2px;
+        }
+
+        /* 按钮的英文翻译装饰 */
+        button.key-btn .btn-en {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            font-size: 8px;
+            font-weight: 300;
+            color: var(--text-sub);
+            opacity: 0.5;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            z-index: 3;
+            transition: opacity 0.3s ease;
+            /* 竖向文字排列 */
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        /* 按钮hover时显示英文翻译 */
+        button.key-btn:hover .btn-en {
+            opacity: 0.8;
+        }
+
+        /* 按钮的光影效果 */
+        button.key-btn::before,
+        button.key-btn::after {
+            position: absolute;
+            content: '';
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            filter: blur(15px);
+            opacity: 0.3;
+            transition: all 0.5s ease;
+            z-index: 1;
+        }
+
+        /* 默认光影位置 */
+        button.key-btn::before {
+            top: -10px;
+            right: -10px;
+        }
+
+        button.key-btn::after {
+            bottom: -10px;
+            left: -10px;
+        }
+
+        /* Hover 效果: 光影扩散，按钮边框变色 */
+        button.key-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        button.key-btn:hover::before,
+        button.key-btn:hover::after {
+            opacity: 0.6;
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Active 效果 */
+        button.key-btn:active .btn-face,
+        button.key-btn.active .btn-face {
+            transform: scale(0.95);
+            background: rgba(253, 252, 248, 0.95);
+        }
+
+        /* --- 为每个按钮定制莫兰迪色系光影 --- */
+        
+        /* Key 1: 名片 - 灰绿 */
+        .key-1::before { background: var(--key-1-shadow); }
+        .key-1::after { background: var(--key-1-border); }
+        .key-1:hover .btn-face { border-color: var(--key-1-border); color: var(--key-1-shadow); }
+
+        /* Key 2: 项目 - 藕粉 */
+        button.key-btn.key-2::before { background: var(--key-2-shadow); }
+        button.key-btn.key-2::after { background: var(--key-2-border); }
+        .key-2:hover .btn-face { border-color: var(--key-2-border); color: var(--key-2-shadow); }
+        
+        /* Key 3: 应用 - 雾蓝 */
+        button.key-btn.key-3::before { background: var(--key-3-shadow); }
+        button.key-btn.key-3::after { background: var(--key-3-border); }
+        .key-3:hover .btn-face { border-color: var(--key-3-border); color: var(--key-3-shadow); }
+        
+        /* 手机按钮光效 - 应用到.card元素 */
+        .phone-button .card::before,
+        .phone-button .card::after {
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0.3;
+            transition: all 0.5s ease;
+        }
+        
+        /* 默认光影位置 */
+        .phone-button .card::before {
+            top: -15px;
+            right: -15px;
+        }
+        
+        .phone-button .card::after {
+            bottom: -15px;
+            left: -15px;
+        }
+        
+        /* 藕粉按钮光效 - 莫兰迪色系调整 */
+        .phone-button.key-2 .card::before {
+            background: rgba(240, 98, 146, 0.6); /* 柔和的藕粉色 */
+        }
+        
+        .phone-button.key-2 .card::after {
+            background: rgba(244, 143, 177, 0.4); /* 更浅的藕粉色 */
+        }
+        
+        /* 雾蓝按钮光效 - 莫兰迪色系调整 */
+        .phone-button.key-3 .card::before {
+            background: rgba(121, 134, 203, 0.6); /* 柔和的雾蓝色 */
+        }
+        
+        .phone-button.key-3 .card::after {
+            background: rgba(159, 168, 218, 0.4); /* 更浅的雾蓝色 */
+        }
+        
+        /* 悬停时光影变化 */
+        .phone-button:hover .card::before,
+        .phone-button:hover .card::after {
+            opacity: 0.6;
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Key 4: 设计 - 暖褐 */
+        .key-4::before { background: var(--key-4-shadow); }
+        .key-4::after { background: var(--key-4-border); }
+        .key-4:hover .btn-face { border-color: var(--key-4-border); color: var(--key-4-shadow); }
+
+        /* Key 5: 博客 - 鼠尾草 */
+        .key-5::before { background: var(--key-5-shadow); }
+        .key-5::after { background: var(--key-5-border); }
+        .key-5:hover .btn-face { border-color: var(--key-5-border); color: var(--key-5-shadow); }
+
+
+        /* =========================================
+           4. 主舞台 (Main Desk)
+           ========================================= */
+        .desk-container {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10; /* 保证在背景之上 */
+        }
+
+        .slogan {
+            font-size: 3rem;
+            font-weight: 300;
+            line-height: 1.4;
+            opacity: 0;
+            animation: fadeInUp 1.2s ease 0.5s forwards;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        
+        .slogan span {
+            display: block; font-size: 1.1rem; color: var(--text-sub); margin-top: 15px; font-style: italic;
+        }
+
+        /* =========================================
+           5. 沉浸式 AI 聊天 (Immersive Chat)
+           ========================================= */
+        .interaction-area {
+            position: relative;
+            width: 100%; max-width: 600px;
+            height: 400px;
+            display: flex; flex-direction: column;
+            justify-content: flex-end; /* 消息从下往上堆叠 */
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        /* 骰子 (入口) */
+        .dice-placeholder {
+            width: 60px; height: 60px;
+            border: 2px solid var(--text-main);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.5s ease;
+            font-size: 28px; background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 20;
+        }
+        .dice-placeholder:hover { transform: rotate(180deg) scale(1.1); background: var(--text-main); color: #fff; border-color: transparent; }
+
+        /* 聊天容器 - 无边界设计 */
+        .immersive-chat {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 100%;
+            display: flex; /* 默认显示 */
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 20px;
+            z-index: 15;
+            mask-image: linear-gradient(to top, black 80%, transparent 100%); /* 顶部渐隐效果 */
+            -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%);
+        }
+
+        .chat-messages {
+            width: 100%;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scrollbar-width: none; /* 隐藏滚动条 */
+        }
+        .chat-messages::-webkit-scrollbar { display: none; }
+
+        /* 极简气泡 */
+        .bubble {
+            max-width: 80%;
+            padding: 0; /* 极简风格，甚至可以不要 Padding，只靠文字排版，这里保留一点 */
+            font-size: 1rem;
+            line-height: 1.6;
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+
+        .bubble-ai {
+            align-self: flex-start;
+            color: var(--text-main);
+            /* 给 AI 消息加一个左侧竖线装饰，代替气泡框 */
+            border-left: 3px solid var(--key-2-shadow); 
+            padding-left: 15px;
+        }
+
+        .bubble-user {
+            align-self: flex-end;
+            color: var(--text-sub);
+            text-align: right;
+            border-right: 3px solid #ccc;
+            padding-right: 15px;
+        }
+
+        /* 极简输入框 */
+        .chat-input-wrapper {
+            width: 100%;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .minimal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            padding: 10px 0;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .minimal-input:focus { border-bottom-color: var(--text-main); }
+        .minimal-input::placeholder { color: #aaa; font-style: italic; }
+
+        .minimal-send {
+            background: transparent;
+            border: 1px solid var(--text-main);
+            color: var(--text-main);
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .minimal-send:hover { background: var(--text-main); color: #fff; }
+
+        /* 关闭按钮 (隐藏的小叉) */
+        .close-chat-minimal {
+            position: absolute; top: 0; right: 0;
+            padding: 10px; cursor: pointer; opacity: 0.3; font-size: 1.5rem;
+        }
+        .close-chat-minimal:hover { opacity: 1; }
+
+        /* =========================================
+           6. 内容抽屉 (Drawers) & 弹窗逻辑
+           ========================================= */
+        /* 应用抽屉样式 */
+        .apps-container {
+            flex: 1;
+            padding: 20px;
+            overflow: hidden;
+        }
+        
+        .horizontal-scroll {
+            display: flex;
+            gap: 30px;
+            padding: 20px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--text-sub) transparent;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .horizontal-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .horizontal-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .horizontal-scroll::-webkit-scrollbar-thumb {
+            background-color: var(--text-sub);
+            border-radius: 3px;
+        }
+        
+        /* 手机样式按钮 - 来自 phone_button 文件 */
+        .phone-button {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .card {
+            width: 210px;
+            height: 400px;
+            background: black;
+            border-radius: 35px;
+            border: 2px solid rgb(40, 40, 40);
+            padding: 7px;
+            position: relative;
+            box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.486);
+        }
+        
+        .card-int {
+            background-image: linear-gradient(
+                to right bottom,
+                #f5f2f2,
+                #f8d3e031,
+                #e8d8dd,
+                #ded9dc,
+                #e5d8ee,
+                #ffffff,
+                #eae8ed,
+                #e6eff8,
+                #d0e0f0,
+                #c0d0e8,
+                #b8c8e0,
+                #b0c0d8,
+                #a8b8d0
+            );
+            background-size: 200% 200%;
+            background-position: 0% 0%;
+            height: 100%;
+            border-radius: 25px;
+            transition: all 0.6s ease-out;
+            overflow: hidden;
+        }
+        
+        .phone-button:hover .card-int {
+            background-position: 100% 100%;
+        }
+        
+        .top {
+            position: absolute;
+            top: 0px;
+            right: 50%;
+            transform: translate(50%, 0%);
+            width: 35%;
+            height: 18px;
+            background-color: rgb(1, 1, 1);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        
+        .speaker {
+            position: absolute;
+            top: 2px;
+            right: 50%;
+            transform: translate(50%, 0%);
+            width: 40%;
+            height: 2px;
+            border-radius: 2px;
+            background-color: rgb(20, 20, 20);
+        }
+        
+        .camera {
+            position: absolute;
+            top: 6px;
+            right: 84%;
+            transform: translate(50%, 0%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.048);
+        }
+        
+        .int {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            top: 50%;
+            right: 50%;
+            transform: translate(50%, -50%);
+            background-color: rgba(0, 0, 255, 0.212);
+        }
+        
+        .btn1,
+        .btn2,
+        .btn3,
+        .btn4 {
+            position: absolute;
+            width: 2px;
+        }
+        
+        .btn1,
+        .btn2,
+        .btn3 {
+            height: 45px;
+            top: 30%;
+            right: -4px;
+            background-image: linear-gradient(
+                to right,
+                #111111,
+                #222222,
+                #333333,
+                #464646,
+                #595959
+            );
+        }
+        
+        .btn2,
+        .btn3 {
+            transform: scale(-1);
+            left: -4px;
+        }
+        
+        .btn2,
+        .btn3 {
+            transform: scale(-1);
+            height: 30px;
+        }
+        
+        .btn2 {
+            top: 26%;
+        }
+        
+        .btn3 {
+            top: 36%;
+        }
+        
+        .hello {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            line-height: 35px;
+            height: 100%;
+            transition: 0.5s ease-in-out;
+        }
+        
+        .hidden {
+            display: block;
+            opacity: 0;
+            transition: all 0.3s ease-in;
+        }
+        
+        .phone-button:hover .hidden {
+            opacity: 1;
+        }
+        
+        .phone-button:hover .welcome {
+            transform: translateY(-20px);
+        }
+        
+        /* 应用预览样式 */
+        .app-preview {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            height: 100%;
+            padding: 20px;
+        }
+        
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .key-2-bg {
+            background: var(--key-2-bg);
+        }
+        
+        .key-3-bg {
+            background: var(--key-3-bg);
+        }
+        
+        .app-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .app-description {
+            font-size: 0.9rem;
+            opacity: 0.8;            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 手机屏幕顶部 */
+        .phone-screen::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        
+        .app-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            z-index: 2;
+        }
+        
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-icon::before {
+            content: '📱';
+        }
+        
+        .app-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        
+        .app-description {
+            font-size: 14px;
+            color: var(--text-sub);
+            line-height: 1.5;
+        }
+        
+        .phone-home {
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 10px;
+        }
+        
+        .home-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .phone-button:hover .home-button {
+            background: rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 按钮颜色样式 */
+        .key-2-bg {
+            background: var(--key-2-bg);
+            border: 2px solid var(--key-2-border);
+        }
+        
+        .key-3-bg {
+            background: var(--key-3-bg);
+            border: 2px solid var(--key-3-border);
+        }
+        
+        .key-2 .app-icon {
+            background: var(--key-2-bg);
+            border-color: var(--key-2-border);
+            box-shadow: 0 10px 30px var(--key-2-shadow);
+        }
+        
+        .key-3 .app-icon {
+            background: var(--key-3-bg);
+            border-color: var(--key-3-border);
+            box-shadow: 0 10px 30px var(--key-3-shadow);
+        }
+        
+        .drawer-layer {
+            position: fixed;
+            top: 0; bottom: 0;
+            left: var(--sidebar-width); /* 让出侧边栏 */
+            width: calc(100% - var(--sidebar-width));
+            background: rgba(253, 252, 248, 0.98); /* 略微透出背景 */
+            z-index: 500;
+            transform: translateX(-100%);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1), opacity 0.4s ease;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.05);
+        }
+        .drawer-layer.open { transform: translateX(0); opacity: 1; }
+
+        .drawer-header {
+            padding: 40px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .drawer-title { font-size: 2rem; font-weight: 700; position: relative; }
+        .drawer-title::after { content: ''; display: block; width: 40px; height: 4px; background: var(--key-2-shadow); margin-top: 10px; }
+        .close-btn { font-size: 2rem; cursor: pointer; opacity: 0.5; transition: 0.3s; }
+        .close-btn:hover { opacity: 1; transform: rotate(90deg); }
+
+        /* 3D 名片样式 */
+        :root {
+            /* 升级版：高饱和国潮莫兰迪蓝调 */
+            --pop-blue: #4A90E2;      /* 霁青 - 亮眼且深邃 */
+            --pop-indigo: #354E6C;    /* 黛蓝 - 沉稳 */
+            --accent-mint: #A8E6CF;   /* 荷绿 - 撞色装饰 */
+            --accent-pink: #F4ACB7;   /* 莫兰迪粉 - 亮眼点缀 */
+            --card-bg: #FDFCF8;       /* 象牙白 */
+            --text-dark: #2C2C2C;
+        }
+
+        /* --- 3D 翻转容器 --- */
+        .card-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transform: translateY(-20%);
+        }
+
+        .card-wrapper {
+            width: 420px;
+            height: 250px;
+            perspective: 1200px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 20px 40px rgba(74, 144, 226, 0.15);
+            border-radius: 24px;
+        }
+
+        .card-wrapper.is-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 10px solid #fff; 
+            background-color: var(--card-bg);
+            box-sizing: border-box;
+        }
+
+        /* --- 正面样式 --- */
+        .card-front {
+            z-index: 2;
+        }
+
+        /* 油画棒色块 - 蓝色系 + 粉色点缀 */
+        .oil-patch {
+            position: absolute;
+            filter: blur(18px);
+            opacity: 0.85;
+            z-index: 0;
+        }
+        .patch-1 {
+            width: 220px; height: 220px;
+            background: var(--pop-blue);
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            top: -60px; right: -40px;
+        }
+        .patch-2 {
+            width: 160px; height: 160px;
+            background: var(--accent-mint);
+            border-radius: 60% 40% 30% 70% / 50% 30% 70% 50%;
+            bottom: -60px; left: -20px;
+        }
+        /* 粉色光晕 - 已下移位置 */
+        .patch-3 {
+            width: 160px; height: 160px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            top: 40px;
+            left: -50px;
+            opacity: 0.65;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            padding: 30px;
+            align-items: center;
+        }
+
+        /* 头像 */
+        .avatar-frame {
+            width: 85px; height: 85px;
+            border-radius: 22px;
+            border: 4px solid #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background: #fff;
+            flex-shrink: 0;
+        }
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        .info-section {
+            margin-left: 20px;
+            text-align: left;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .name {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .tag-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .tag {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .tag-infp { background: #fff; color: var(--pop-blue); border: 1px solid var(--pop-blue); }
+        /* 更新：粉色底标签 */
+        .tag-aigc { background: var(--accent-pink); color: #fff; }
+
+        .details {
+            font-size: 0.8rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        .details strong { color: var(--text-dark); }
+
+        /* --- 背面样式 --- */
+        .card-back {
+            transform: rotateY(180deg);
+            background: var(--pop-indigo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .back-bg-image {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+        }
+        .back-bg-image img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        .back-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(53, 78, 108, 0.9), rgba(74, 144, 226, 0.7));
+            z-index: 2;
+        }
+
+        .quote-container {
+            position: relative;
+            z-index: 3;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 30px;
+            width: 85%;
+            height: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+        }
+
+        .quote-text {
+            color: #fff;
+            font-size: 1.45rem;
+            font-weight: 700;
+            line-height: 1.4;
+            font-style: italic;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .tip {
+            position: absolute;
+            bottom: -45px;
+            width: 100%;
+            text-align: center;
+            color: #777;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            /* 调整卡片容器位置 */
+            .card-container {
+                transform: translateY(-15%);
+            }
+            
+            /* 调整卡片尺寸 */
+            .card-wrapper {
+                width: 320px;
+                height: 190px;
+            }
+            
+            /* 调整头像大小 */
+            .avatar-frame {
+                width: 70px;
+                height: 70px;
+            }
+            
+            /* 调整字体大小 */
+            .name {
+                font-size: 1.2rem;
+            }
+            
+            .tag {
+                font-size: 0.6rem;
+            }
+            
+            .details {
+                font-size: 0.7rem;
+            }
+            
+            /* 调整卡片内容内边距 */
+            .card-content {
+                padding: 20px;
+            }
+            
+            /* 调整引用文字大小 */
+            .quote-text {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* 更小屏幕的调整 */
+            .card-wrapper {
+                width: 280px;
+                height: 170px;
+            }
+            
+            .card-content {
+                padding: 15px;
+            }
+            
+            .name {
+                font-size: 1.1rem;
+            }
+            
+            .quote-text {
+                font-size: 1rem;
+            }
+        }
+
+        /* =========================================
+           7. 项目经历弹窗逻辑 (The Project Newspaper)
+           =========================================
+           此处为重点修改区域，已加强注释。
+           实现了横向惯性滚动和卡片悬停反馈。
+        */
+        .project-container {
+            flex: 1; 
+            width: 100%;
+            /* 允许横向滚动 (x-axis scroll) */
+            overflow-x: auto; 
+            overflow-y: hidden;
+            display: flex; 
+            align-items: center; /* 垂直居中 */
+            padding: 0 40px 40px 40px; /* 留出呼吸空间 */
+            
+            /* 平滑滚动体验 */
+            scroll-behavior: smooth;
+            
+            /* 自定义滚动条样式 */
+            scrollbar-width: thin;
+            scrollbar-color: rgba(150, 150, 150, 0.3) transparent;
+        }
+        
+        /* WebKit浏览器滚动条样式 */
+        .project-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .project-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .project-container::-webkit-scrollbar-thumb {
+            background: rgba(150, 150, 150, 0.3);
+            border-radius: 3px;
+            transition: background 0.3s ease;
+        }
+        
+        .project-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(150, 150, 150, 0.6);
+        }
+
+        .project-list {
+            display: flex;
+            gap: 50px; /* 卡片间距 */
+            height: 75%; /* 卡片占据高度的 75% */
+            min-height: 450px;
+            padding-right: 100px; /* 防止最后一张卡片贴边 */
+        }
+
+        .project-card {
+            min-width: 340px; width: 340px;
+            height: 100%;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex; flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 悬停效果：上浮 + 阴影加深 */
+        .project-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+            border-color: var(--key-2-border);
+        }
+
+        .project-img {
+            height: 60%;
+            background: #f4f4f4;
+            display: flex; align-items: center; justify-content: center;
+            color: #aaa; font-style: italic; letter-spacing: 1px;
+            position: relative;
+        }
+        /* 模拟图片遮罩动效 */
+        .project-img::after {
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.1); opacity: 0; transition: 0.3s;
+        }
+        .project-card:hover .project-img::after { opacity: 1; }
+
+        .project-info {
+            padding: 30px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .project-tag { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--key-2-shadow); font-weight: bold;}
+        .project-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; line-height: 1.2; }
+        .project-desc { font-size: 0.9rem; color: #666; line-height: 1.6; }
+
+
+        /* =========================================
+           8. 项目详情全屏页 (Full Detail Overlay)
+           ========================================= */
+        .detail-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 2000;
+            transform: translateY(100%); transition: transform 0.5s ease;
+            display: flex; flex-direction: column;
+        }
+        .detail-overlay.active { transform: translateY(0); }
+        .detail-nav { padding: 30px 50px; display: flex; justify-content: flex-end; }
+        .detail-content { flex: 1; padding: 0; width: 100%; }
+
+
+        /* =========================================
+           9. 移动端适配 (Mobile)
+           ========================================= */
+        /* 横屏模式适配 */
+        @media (orientation: landscape) {
+            .project-container {
+                overflow-x: auto;
+                overflow-y: hidden;
+                display: flex;
+                align-items: center;
+                -webkit-overflow-scrolling: touch;
+            }
+            .project-list {
+                display: flex;
+                height: 75%;
+                min-height: 350px;
+                gap: 50px;
+                flex-wrap: nowrap;
+            }
+            
+            /* 移动设备横屏模式增强 */
+            @media (max-width: 1024px) {
+                .project-container {
+                    padding: 0 20px 20px 20px;
+                }
+                .project-list {
+                    min-height: 300px;
+                    gap: 30px;
+                }
+                .project-card {
+                    min-width: 280px;
+                    width: 280px;
+                }
+            }
+        }
+        
+        @media (max-width: 768px) {
+            :root { --sidebar-width: 60px; } /* 移动端侧边栏宽度设置为60px */
+            
+            /* 背景光效减弱以提升性能 */
+            .light-beam { display: none; }
+
+            /* 移动端侧边栏保持在左侧 */
+            .sidebar-container {
+                width: var(--sidebar-width);
+                height: 100vh;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                flex-direction: column;
+                gap: 0;
+                background: rgba(253, 252, 248, 0.95);
+                box-shadow: 2px 0 15px rgba(0, 0, 0, 0.05);
+                padding: 0;
+            }
+
+            /* 移动端按钮设置 */
+            button.key-btn {
+                width: 100%;
+                height: 20%;
+                font-size: 11px;
+            }
+            /* 保持竖向文字排列 */
+            button.key-btn .btn-face { 
+                writing-mode: vertical-rl; 
+                border-radius: 0;
+                font-size: 11px;
+                letter-spacing: 1px;
+            }
+            /* 移动端英文翻译位置调整 */
+            button.key-btn .btn-en {
+                top: 50%;
+                left: 10px;
+                transform: translateY(-50%);
+                font-size: 7px;
+            }
+            /* 移动端简化光影效果 */
+            button.key-btn::before, button.key-btn::after {
+                width: 20px;
+                height: 20px;
+                filter: blur(10px);
+            }
+            /* 调整光影位置 */
+            button.key-btn::before { top: -5px; right: -5px; }
+            button.key-btn::after { bottom: -5px; left: -5px; }
+            button.key-btn:active .btn-face { transform: translate(0, 0.2em); }
+
+            .desk-container { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); padding-bottom: 20px; }
+            .slogan { font-size: 2rem; }
+            .drawer-layer { left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); bottom: 0; }
+            .project-container { display: block; overflow-y: auto; padding: 20px; }
+            .project-list { flex-direction: column; height: auto; gap: 30px; padding-bottom: 50px; }
+            .project-card { width: 100%; min-width: auto; height: 450px; }
+        }
+
+        /* 动画关键帧 */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 画展样式 */
+        .scroll-animations-example {
+            > .scrollsection {
+                padding: 10vh 10vh 10vh 10vmax;
+                min-width: 550vh;
+            }
+
+            > .scrollsection > .item {
+                display: inline-block;
+                position: relative;
+                margin: 0 -30vh 0 3vh;
+            }
+
+            > .scrollsection > .item::before {
+                content: '';
+                display: inline-block;
+                vertical-align: middle;
+                height: 100%;
+            }
+
+            > .scrollsection > .item.-big {
+                height: 80vh;
+                width: 60vh;
+            }
+
+            > .scrollsection > .item.-big.-horizontal {
+                height: 60vh;
+                width: 80vh;
+            }
+
+            > .scrollsection > .item.-normal {
+                height: 60vh;
+                width: 45vh;
+                z-index: 1;
+            }
+
+            > .scrollsection > .item.-normal.-horizontal {
+                height: 45vh;
+                width: 60vh;
+            }
+
+            > .scrollsection > .item.-normal:nth-of-type(3n) {
+                bottom: 5vh;
+            }
+
+            > .scrollsection > .item.-normal:nth-of-type(4n) {
+                bottom: -5vh;
+            }
+
+            > .scrollsection > .item.-small {
+                height: 40vh;
+                width: 30vh;
+                z-index: 2;
+            }
+
+            > .scrollsection > .item.-small.-horizontal {
+                height: 30vh;
+                width: 40vh;
+            }
+
+            > .scrollsection > .item.-small:nth-of-type(3n) {
+                bottom: 13vh;
+            }
+
+            > .scrollsection > .item.-small:nth-of-type(4n) {
+                bottom: -13vh;
+            }
+
+            > .scrollsection > .item > .image {
+                height: 100%;
+                width: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                filter: grayscale(1);
+                opacity: 0;
+                pointer-events: none;
+                transform: translateX(0) translateY(0) scale(1);
+                transition: filter .3s ease,
+                    opacity 1s ease,
+                    transform 1s ease;
+            }
+
+            > .scrollsection > .item:nth-of-type(4n) > .image {
+                transform: translateX(-30vh) translateY(-30vh) scale(.8);
+                transition-delay: 0;
+            }
+
+            > .scrollsection > .item:nth-of-type(4n - 1) > .image {
+                transform: translateX(30vh) translateY(30vh) scale(.8);
+                transition-delay: .05s;
+            }
+
+            > .scrollsection > .item:nth-of-type(4n - 2) > .image {
+                transform: translateX(-30vh) translateY(30vh) scale(.8);
+                transition-delay: .1s;
+            }
+
+            > .scrollsection > .item:nth-of-type(4n - 3) > .image {
+                transform: translateX(-30vh) translateY(-30vh) scale(.8);
+                transition-delay: .15s;
+            }
+
+            > .scrollsection > .item > .image.-active {
+                transform: translateX(0) translateY(0) scale(1);
+                opacity: .8;
+                pointer-events: auto;
+                transition: filter .3s ease,
+                    opacity 1s ease,
+                    transform 1s ease;
+            }
+
+            > .scrollsection > .item > .image.-clicked {
+                transform: translateX(0) translateY(0) scale(5);
+                opacity: 0;
+                pointer-events: auto;
+                transition: filter .3s ease,
+                    opacity 1s ease,
+                    transform 1s ease;
+            }
+
+            > .scrollsection > .item > .image.-active:hover {
+                height: 100%;
+                width: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                filter: grayscale(0);
+                opacity: 1;
+                cursor: pointer;
+            }
+        }
+
+        /* 音乐播放器样式 */
+        .audio-container{
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 120px;
+          height: 120px;
+          z-index: 1000;
+        }
+        .audiosvg-container{
+          position: relative;
+        }
+        .play-text,
+        .pause-text{
+          position: absolute;
+          left: 50%;
+          top: -10px;
+          transform: translateX(-50%);
+          font-size: 12px;
+          font-family: 'Montserrat', sans-serif;
+          letter-spacing: 1px;
+          color: #1A478C;
+          opacity: 0;
+          visibility: hidden;
+          white-space: nowrap;
+        }
+        .active-box{
+          width: 80%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          display: none;
+        }
+        .audiosvg{
+          width: 100%;
+          height: auto;
+          cursor: pointer;
+        }
+        #svg-audio {
+          transform-origin: 125.5px 154px;
+        }
+        #svg-audio circle.st5 {
+          transform-origin: 125.5px 154px;
+        }
+        @media screen and (max-width: 768px) {
+          .audio-container {
+            width: 100px;
+            height: 100px;
+            bottom: 15px;
+            right: 15px;
+          }
+          .play-text,
+          .pause-text {
+            font-size: 10px;
+            top: -25px;
+          }
+        }
+        @media screen and (max-width: 480px) {
+          .audio-container {
+            width: 80px;
+            height: 80px;
+            bottom: 10px;
+            right: 10px;
+          }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. 背景层 -->
+    <div class="ocean">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <!-- 2. 键盘风格侧边栏 -->
+    <nav class="sidebar-container">
+        <!-- 按钮 1: 名片 -->
+        <button class="key-btn key-1">
+            <span class="btn-face">我的名片</span>
+            <span class="btn-en">ABOUT</span>
+        </button>
+        <!-- 按钮 2: 项目 -->
+        <button class="key-btn key-2">
+            <span class="btn-face">项目经历</span>
+            <span class="btn-en">PROJECTS</span>
+        </button>
+        <!-- 按钮 3: 应用 -->
+        <button class="key-btn key-3">
+            <span class="btn-face">我的应用</span>
+            <span class="btn-en">APPS</span>
+        </button>
+        <!-- 按钮 4: 设计 -->
+        <button class="key-btn key-4">
+            <span class="btn-face">视觉设计</span>
+            <span class="btn-en">DESIGN</span>
+        </button>
+        <!-- 按钮 5: 博客 -->
+        <button class="key-btn key-5">
+            <span class="btn-face">思维博客</span>
+            <span class="btn-en">BLOG</span>
+        </button>
+    </nav>
+
+    <!-- 3. 首页主舞台 -->
+    <main class="desk-container">
+        <div class="slogan-container">
+            <div class="title-container">
+                <!-- 英文副标题：使用深色调，增加清晰度 -->
+                <div class="font-title-en">
+                    <span></span>
+                    CREATION LEADS TO SELF-REALIZATION
+                </div>
+
+                <!-- 中文主标题：错落排版，深色渐变 -->
+                <div class="relative">
+                    <h1 class="font-title-cn">
+                        <span class="block"><span class="char-accent-dark">AI-powered</span> 个性表达</span>
+                        <span class="block text-gradient-dark">Sunburntsalmon作品集</span>
+                    </h1>
+                    
+                    <!-- 垂直装饰文字：深色半透明 -->
+                    <div class="absolute -right-6 top-0 bottom-0 flex items-center">
+                        <div class="font-title-en rotate-90 origin-center whitespace-nowrap">
+                            FUTURE LOGIC
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 底部装饰线：深色渐变 -->
+                <div>
+                    <div></div>
+                    <div class="font-title-en">EST. 2025</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 交互区域：骰子 + 沉浸式聊天 -->
+        <div class="interaction-area">
+            <!-- 沉浸式无边界聊天 UI -->
+            <div class="immersive-chat" id="chat-ui">
+                
+                <div class="chat-messages" id="chat-messages">
+                    <!-- AI 消息 (左侧竖线装饰) -->
+                    <div class="bubble bubble-ai" id="welcome-message">
+                        <!-- 欢迎消息将通过JavaScript动态设置 -->
+                    </div>
+                </div>
+
+                <!-- 极简输入条 -->
+                <div class="chat-input-wrapper">
+                    <input type="text" class="minimal-input" placeholder="Type something..." id="user-input">
+                    <button class="minimal-send" id="send-button">→</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- 4. 抽屉内容：名片 -->
+    <div id="drawer-card" class="drawer-layer">
+        <div class="drawer-header">
+            <h2 class="drawer-title">About Me</h2>
+            <div class="close-btn">×</div>
+        </div>
+        <div class="card-container">
+            <div class="card-wrapper" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="card-face card-front">
+                        <div class="oil-patch patch-1"></div>
+                        <div class="oil-patch patch-2"></div>
+                        <div class="oil-patch patch-3"></div>
+                        
+                        <div class="card-content">
+                            <div class="avatar-frame">
+                                <img src="https://i.postimg.cc/svC3T91y/tou-xiang.png" alt="Avatar">
+                            </div>
+                            
+                            <div class="info-section">
+                                <div class="name">SunburntSalomon</div>
+                                
+                                <div class="tag-group">
+                                    <span class="tag tag-infp">INFP</span>
+                                    <span class="tag tag-aigc">AIGC自媒体博主</span>
+                                </div>
+
+                                <div class="details">
+                                    <p><strong>Email：</strong>1498373509@qq.com</p>
+                                    <p><strong>Base：</strong>深圳，中国</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-face card-back">
+                        <div class="back-bg-image">
+                            <img src="https://i.postimg.cc/s1hVP0j4/ming-pian-bei-jing.png" alt="Background">
+                        </div>
+                        <div class="back-overlay"></div>
+
+                        <div class="quote-container">
+                            <div class="quote-text">
+                                "Make my mess <br> my message."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tip">点击翻转</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. 抽屉内容：项目经历 (重点修改区) -->
+    <div id="drawer-projects" class="drawer-layer">
+        <div class="drawer-header">
+            <h2 class="drawer-title">Selected Projects</h2>
+            <div class="close-btn">×</div>
+        </div>
+        
+        <!-- 
+            项目容器 (Project Container) 
+            - 支持横向滚动 (overflow-x: auto)
+            - 手机端自动切换为垂直滚动
+        -->
+        <div class="project-container">
+            <div class="project-list">
+                
+                <!-- 项目卡片 1 -->
+                <div class="project-card" data-detail="detail-1">
+                    <div class="project-img">
+                        <img src="https://i.postimg.cc/2q9zGsBN/cover-image1.png" alt="AI校园心理助手" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="project-info">
+                        <div>
+                            <div class="project-tag">2025.04-06</div>
+                            <div class="project-name">AI校园心理助手</div>
+                            <div class="project-desc">辅助设计并测试AI心理测评与咨询助手Demo，为团队提供心理专业支持。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 项目卡片 2 -->
+                <div class="project-card" data-detail="detail-2">
+                    <div class="project-img">
+                        <img src="https://i.postimg.cc/QK1hXV42/cover-image2.png" alt="AI+新媒体运营系统" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="project-info">
+                        <div>
+                            <div class="project-tag">2025.08-11</div>
+                            <div class="project-name">AI+新媒体运营系统</div>
+                            <div class="project-desc">主导从概念到落地的“创作-运营-反馈”全流程 AI 辅助工具设计，实现运营工作流标准化。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 项目卡片 3 -->
+                <div class="project-card" data-detail="detail-3">
+                    <div class="project-img">
+                        <img src="https://i.postimg.cc/bSkpzdCW/cover-image3.png" alt="AI写真/旅拍产品" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="project-info">
+                        <div>
+                            <div class="project-tag">2025.07-11</div>
+                            <div class="project-name">AI写真/旅拍产品</div>
+                            <div class="project-desc">参与用户体验研究与市场策略制定，研发并落地生产衍生文创产品。</div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- 项目卡片 4 -->
+                 <div class="project-card">
+                    <div class="project-img">Cover Image 04</div>
+                    <div class="project-info">
+                        <div>
+                            <div class="project-tag">Vibe Coding</div>
+                            <div class="project-name">个人 AI 知识库</div>
+                            <div class="project-desc">基于 RAG 技术的个人知识管理系统 Demo。</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 其他抽屉占位 -->
+    <div id="drawer-apps" class="drawer-layer">
+        <div class="drawer-header"><h2 class="drawer-title">Vibe Apps</h2><div class="close-btn">×</div></div>
+        <div class="apps-container">
+            <div class="horizontal-scroll">
+                <!-- 手机样式按钮 1 -->
+                <div class="phone-button key-2">
+                    <div class="card">
+                        <div class="btn1"></div>
+                        <div class="btn2"></div>
+                        <div class="btn3"></div>
+                        <div class="btn4"></div>
+                        <div class="card-int">
+                            <div class="app-preview">
+                                <div class="app-icon key-2-bg"></div>
+                                <div class="app-name">AI Chat</div>
+                                <div class="app-description">智能聊天助手</div>
+                            </div>
+                        </div>
+                        <div class="top">
+                            <div class="camera">
+                                <div class="int"></div>
+                            </div>
+                            <div class="speaker"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 手机样式按钮 2 -->
+                <div class="phone-button key-3">
+                    <div class="card">
+                        <div class="btn1"></div>
+                        <div class="btn2"></div>
+                        <div class="btn3"></div>
+                        <div class="btn4"></div>
+                        <div class="card-int">
+                            <div class="app-preview">
+                                <div class="app-icon key-3-bg"></div>
+                                <div class="app-name">Image Gen</div>
+                                <div class="app-description">AI图像生成</div>
+                            </div>
+                        </div>
+                        <div class="top">
+                            <div class="camera">
+                                <div class="int"></div>
+                            </div>
+                            <div class="speaker"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="drawer-design" class="drawer-layer">
+        <div class="drawer-header"><h2 class="drawer-title">Design Gallery</h2><div class="close-btn">×</div></div>
+        <div class='scroll-animations-example' data-scroll-container>
+            <div class='scrollsection' data-scroll-section>
+                <div class='item -normal' data-scroll data-scroll-speed="2">
+                    <img class='image' src='https://i.postimg.cc/cvXZ1pmz/1-(1).png'>
+                </div>
+                <div class='item -normal' data-scroll data-scroll-speed="1.5">
+                    <img class='image' src='https://i.postimg.cc/75mDPF9H/1-(2).png'>
+                </div>
+                <div class='item -big' data-scroll data-scroll-speed="1">
+                    <img class='image' src='https://i.postimg.cc/QF0sN2mW/1-(3).png'>
+                </div>
+                <div class='item -small -horizontal' data-scroll data-scroll-speed="4">
+                    <img class='image' src='https://i.postimg.cc/tYzGDKLr/1-(4).png'>
+                </div>
+                <div class='item -normal' data-scroll data-scroll-speed="3">
+                    <img class='image' src='https://i.postimg.cc/TpfZykpb/1.png'>
+                </div>
+                <div class='item -normal -horizontal' data-scroll data-scroll-speed="2">
+                    <img class='image' src='https://i.postimg.cc/RN4j3PNq/1-(1).png'>
+                </div>
+                <div class='item -big -horizontal' data-scroll data-scroll-speed="4">
+                    <img class='image' src='https://i.postimg.cc/9rbsyG7P/1-(2).png'>
+                </div>
+                <div class='item -small' data-scroll data-scroll-speed="2">
+                    <img class='image' src='https://i.postimg.cc/9rCv4xrP/1-(3).png'>
+                </div>
+                <div class='item -normal -horizontal' data-scroll data-scroll-speed="1">
+                    <img class='image' src='https://i.postimg.cc/0zNFnbGN/1.png'>
+                </div>
+                <div class='item -small -horizontal' data-scroll data-scroll-speed="3">
+                    <img class='image' src='https://i.postimg.cc/crhPfQnk/1-(1).png'>
+                </div>
+                <div class='item -big' data-scroll data-scroll-speed="1">
+                    <img class='image' src='https://i.postimg.cc/zyf67VC6/1-(2).png'>
+                </div>
+                <div class='item -normal -horizontal' data-scroll data-scroll-speed="1">
+                    <img class='image' src='https://i.postimg.cc/xNSB355M/1-(1).png'>
+                </div>
+                <div class='item -small -horizontal' data-scroll data-scroll-speed="4">
+                    <img class='image' src='https://i.postimg.cc/V0BpGtHk/1-(2).png'>
+                </div>
+                <div class='item -big' data-scroll data-scroll-speed="3">
+                    <img class='image' src='https://i.postimg.cc/9zG6Q3XJ/1-(3).png'>
+                </div>
+                                <div class='item -normal -horizontal' data-scroll data-scroll-speed="2">
+                    <img class='image' src='https://i.postimg.cc/kDx0grXn/1.jpg'>
+                </div>
+                <div class='item -normal -horizontal' data-scroll data-scroll-speed="2">
+                    <img class='image' src='https://i.postimg.cc/bdQ7wXY9/1-(1).jpg'>
+                </div>
+                <div class='item -small -horizontal' data-scroll data-scroll-speed="4">
+                    <img class='image' src='https://i.postimg.cc/kRFz1Sht/1-(2).jpg'>
+                </div>
+                <div class='item -big' data-scroll data-scroll-speed="2">
+                    <img class='image' src='https://i.postimg.cc/pyDwLNVk/1-(3).jpg'>
+                </div>
+                <div class='item -normal -horizontal' data-scroll data-scroll-speed="1">
+                    <img class='image' src='https://i.postimg.cc/6Tdkps5J/1-(4).jpg'>
+                </div>
+                <div class='item -small -horizontal' data-scroll data-scroll-speed="3">
+                    <img class='image' src='https://i.postimg.cc/XXwRYM73/1-(5).jpg'>
+                </div>
+                <div class='item -normal' data-scroll data-scroll-speed="1">
+                    <img class='image' src='https://i.postimg.cc/87n30NwD/1-(1).png'>
+                </div>
+                <div class='item -normal' data-scroll data-scroll-speed="1">
+                    <img class='image' src='https://i.postimg.cc/CR6tQSJS/1-(2).png'>
+                </div>
+                <div class='item -normal' data-scroll data-scroll-speed="1">
+                    <img class='image' src='https://i.postimg.cc/w1bPGgFv/1-(3).png'>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="drawer-blog" class="drawer-layer">
+        <div class="drawer-header"><h2 class="drawer-title">Thinking</h2><div class="close-btn">×</div></div>
+        <iframe src="博客/博客界面.html" style="width:100%; height:100%; border:none;"></iframe>
+    </div>
+
+    <!-- 6. 全屏项目详情 (Overlay) -->
+    <div id="detail-overlay" class="detail-overlay">
+        <div class="detail-nav">
+            <div class="close-btn" style="font-size: 1rem; display:flex; align-items:center; gap:10px;">
+                <span>CLOSE</span> <span>×</span>
+            </div>
+        </div>
+        <div class="detail-content">
+            <iframe src="项目经历/项目经历1.html" style="width: 100%; height: 100%; border: none;" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <script type="module">
+        // 引入AI配置文件
+        import AI_CONFIG from './ai-config.js';
+        
+        // 确保AI_CONFIG有默认值
+        const AI = {
+            api: AI_CONFIG.api || {
+                provider: 'openai',
+                openai: {
+                    url: '',
+                    apiKey: '',
+                    model: 'gpt-3.5-turbo',
+                    maxTokens: 1000,
+                    temperature: 0.7
+                }
+            },
+            systemPrompt: AI_CONFIG.systemPrompt || '你是一个友好的AI助手',
+            chat: AI_CONFIG.chat || {
+                welcomeMessage: '你好！有什么我可以帮助你的吗？',
+                loadingMessage: '正在思考...',
+                errorMessage: '抱歉，我暂时无法回答你的问题'
+            }
+        };
+        
+        // 消息历史数组，用于存储对话上下文
+        let messageHistory = [];
+        
+        // --- JS 交互逻辑 ---
+
+        // 1. 抽屉控制
+        function openDrawer(id, btnEl) {
+            const drawer = document.getElementById('drawer-' + id);
+            const isOpen = drawer && drawer.classList.contains('open');
+            const isActive = btnEl && btnEl.classList.contains('active');
+            
+            // 如果抽屉已经打开且按钮处于激活状态，则关闭抽屉
+            if (isOpen && isActive) {
+                closeAllDrawers();
+            } else {
+                // 否则关闭所有抽屉并打开当前抽屉
+                closeAllDrawers();
+                // 按钮激活状态 (Visual Feedback)
+                if(btnEl) btnEl.classList.add('active');
+                // 打开抽屉
+                if(drawer) drawer.classList.add('open');
+            }
+            // 手机端优化：打开抽屉时调整聊天UI位置
+            // 由于聊天UI现在默认显示，我们不再需要关闭它
+        }
+
+        function closeAllDrawers() {
+            document.querySelectorAll('.drawer-layer').forEach(d => d.classList.remove('open'));
+            document.querySelectorAll('.key-btn').forEach(b => b.classList.remove('active'));
+        }
+
+        // 2. 沉浸式聊天逻辑 - 已简化，对话UI默认显示
+        // 移除了openImmersiveChat和closeImmersiveChat函数，因为不再需要
+
+        // 3. 卡片翻转功能
+        function toggleFlip(cardWrapper) {
+            cardWrapper.classList.toggle('is-flipped');
+        }
+        // 将函数暴露到全局作用域，以便HTML中的onclick可以调用
+        window.toggleFlip = toggleFlip;
+
+        // 4. AI API 调用函数
+        async function callAIAPI() {
+            const provider = AI.api.provider;
+            const config = AI.api[provider];
+            
+            console.log('API调用参数:', {
+                provider: provider,
+                url: config.url,
+                model: config.model,
+                hasApiKey: !!config.apiKey,
+                apiKeyLength: config.apiKey ? config.apiKey.length : 0,
+                messageHistory: messageHistory
+            });
+            
+            try {
+                let response;
+                let data;
+                
+                switch(provider) {
+                    case 'openai':
+                        response = await fetch(config.url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${config.apiKey}`
+                            },
+                            body: JSON.stringify({
+                                    model: config.model,
+                                    messages: [
+                                        { role: 'system', content: AI.systemPrompt },
+                                        ...messageHistory
+                                    ],
+                                    max_tokens: config.maxTokens,
+                                    temperature: config.temperature
+                                })
+                        });
+                        // 添加详细调试信息
+                        console.log('API响应状态:', response.status);
+                        console.log('API响应状态文本:', response.statusText);
+                        console.log('API响应头:', JSON.stringify([...response.headers], null, 2));
+                        
+                        // 尝试解析响应数据
+                        let data;
+                        try {
+                            data = await response.json();
+                            console.log('API响应数据:', JSON.stringify(data, null, 2));
+                        } catch (jsonError) {
+                            console.error('JSON解析错误:', jsonError);
+                            // 尝试获取原始响应文本
+                            try {
+                                const text = await response.text();
+                                console.log('API原始响应文本:', text);
+                                throw new Error(`API请求失败: ${response.status} ${response.statusText}\n原始响应: ${text}`);
+                            } catch (textError) {
+                                console.error('文本解析错误:', textError);
+                                throw new Error(`API请求失败: ${response.status} ${response.statusText}\n无法解析响应内容`);
+                            }
+                        }
+                        
+                        // 最基础的错误检查
+                        if (!response.ok) {
+                            let errorMsg = `API请求失败: ${response.status} ${response.statusText}`;
+                            if (data.error) {
+                                errorMsg += `\n错误详情: ${JSON.stringify(data.error)}`;
+                            }
+                            throw new Error(errorMsg);
+                        }
+                        
+                        // 检查data是否存在
+                        if (!data) {
+                            throw new Error('API返回空响应');
+                        }
+                        
+                        // 检查是否有错误信息
+                        if (data.error) {
+                            const errorMsg = typeof data.error === 'string' ? data.error : 
+                                           data.error.message || JSON.stringify(data.error);
+                            throw new Error(`API返回错误: ${errorMsg}`);
+                        }
+                        
+                        // 尝试解析不同格式的响应
+                        // 1. API文档标准格式
+                        if (data.choices) {
+                            if (Array.isArray(data.choices) && data.choices.length > 0) {
+                                const choice = data.choices[0];
+                                if (choice && choice.message) {
+                                    // 处理message.content可能是字符串或数组的情况
+                                    if (typeof choice.message.content === 'string') {
+                                        return choice.message.content;
+                                    } else if (Array.isArray(choice.message.content)) {
+                                        // 如果是数组，将所有文本内容拼接
+                                        return choice.message.content
+                                            .filter(item => item.type === 'text' && item.text)
+                                            .map(item => item.text)
+                                            .join(' ');
+                                    }
+                                }
+                            } else if (typeof data.choices === 'object' && data.choices.message) {
+                                // 处理非数组格式的choices
+                                if (typeof data.choices.message.content === 'string') {
+                                    return data.choices.message.content;
+                                } else if (Array.isArray(data.choices.message.content)) {
+                                    return data.choices.message.content
+                                        .filter(item => item.type === 'text' && item.text)
+                                        .map(item => item.text)
+                                        .join(' ');
+                                }
+                                return '无内容';
+                            }
+                        }
+                        
+                        // 2. Anthropic格式
+                        if (data.content) {
+                            if (Array.isArray(data.content) && data.content.length > 0) {
+                                const contentItem = data.content[0];
+                                if (contentItem && contentItem.text) {
+                                    return contentItem.text;
+                                }
+                            } else if (typeof data.content === 'string') {
+                                // 处理字符串格式的content
+                                return data.content;
+                            }
+                        }
+                        
+                        // 3. 简单响应格式
+                        if (typeof data.response === 'string') {
+                            return data.response;
+                        }
+                        if (typeof data.result === 'string') {
+                            return data.result;
+                        }
+                        if (typeof data.text === 'string') {
+                            return data.text;
+                        }
+                        
+                        // 4. 尝试深度解析任何可能的文本内容
+                        if (typeof data === 'object') {
+                            const findText = (obj) => {
+                                if (typeof obj === 'string') return obj;
+                                if (Array.isArray(obj)) {
+                                    for (const item of obj) {
+                                        const text = findText(item);
+                                        if (text) return text;
+                                    }
+                                } else if (obj && typeof obj === 'object') {
+                                    // 优先检查常见的文本字段
+                                    const textFields = ['content', 'text', 'message', 'response', 'result'];
+                                    for (const field of textFields) {
+                                        if (obj[field]) {
+                                            const text = findText(obj[field]);
+                                            if (text) return text;
+                                        }
+                                    }
+                                    // 检查所有字段
+                                    for (const key in obj) {
+                                        if (obj[key]) {
+                                            const text = findText(obj[key]);
+                                            if (text) return text;
+                                        }
+                                    }
+                                }
+                                return null;
+                            };
+                            
+                            const text = findText(data);
+                            if (text) {
+                                return text;
+                            }
+                        }
+                        
+                        // 无法解析响应格式
+                        throw new Error(`无法解析API响应格式，请检查中转站配置和返回格式: ${JSON.stringify(data)}`);
+                        
+                    case 'anthropic':
+                        response = await fetch(config.url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-api-key': config.apiKey,
+                                'anthropic-version': '2023-06-01'
+                            },
+                            body: JSON.stringify({
+                                model: config.model,
+                                messages: messageHistory,
+                                system: AI.systemPrompt,
+                                max_tokens: config.maxTokens,
+                                temperature: config.temperature
+                            })
+                        });
+                        data = await response.json();
+                        // 添加详细调试信息
+                        console.log('API响应状态:', response.status);
+                        console.log('API响应数据:', JSON.stringify(data, null, 2));
+                        
+                        // 最基础的错误检查
+                        if (!response.ok) {
+                            throw new Error(`API请求失败: ${response.status} ${response.statusText}`);
+                        }
+                        
+                        // 检查data是否存在
+                        if (!data) {
+                            throw new Error('API返回空响应');
+                        }
+                        
+                        // 检查是否有错误信息
+                        if (data.error) {
+                            const errorMsg = typeof data.error === 'string' ? data.error : 
+                                           data.error.message || JSON.stringify(data.error);
+                            throw new Error(`API返回错误: ${errorMsg}`);
+                        }
+                        
+                        // 尝试解析不同格式的响应
+                        // 1. Anthropic标准格式
+                        if (data.content) {
+                            if (Array.isArray(data.content) && data.content.length > 0) {
+                                const contentItem = data.content[0];
+                                if (contentItem && contentItem.text) {
+                                    return contentItem.text;
+                                }
+                            } else if (typeof data.content === 'string') {
+                                // 处理字符串格式的content
+                                return data.content;
+                            }
+                        }
+                        
+                        // 2. OpenAI兼容格式
+                        if (data.choices) {
+                            if (Array.isArray(data.choices) && data.choices.length > 0) {
+                                const choice = data.choices[0];
+                                if (choice && choice.message && choice.message.content) {
+                                    return choice.message.content;
+                                }
+                            } else if (typeof data.choices === 'object' && data.choices.message) {
+                                // 处理非数组格式的choices
+                                return data.choices.message.content || '无内容';
+                            }
+                        }
+                        
+                        // 3. 简单响应格式
+                        if (typeof data.response === 'string') {
+                            return data.response;
+                        }
+                        if (typeof data.result === 'string') {
+                            return data.result;
+                        }
+                        if (typeof data.text === 'string') {
+                            return data.text;
+                        }
+                        
+                        // 4. 尝试深度解析任何可能的文本内容
+                        if (typeof data === 'object') {
+                            const findText = (obj) => {
+                                if (typeof obj === 'string') return obj;
+                                if (Array.isArray(obj)) {
+                                    for (const item of obj) {
+                                        const text = findText(item);
+                                        if (text) return text;
+                                    }
+                                } else if (obj && typeof obj === 'object') {
+                                    // 优先检查常见的文本字段
+                                    const textFields = ['content', 'text', 'message', 'response', 'result'];
+                                    for (const field of textFields) {
+                                        if (obj[field]) {
+                                            const text = findText(obj[field]);
+                                            if (text) return text;
+                                        }
+                                    }
+                                    // 检查所有字段
+                                    for (const key in obj) {
+                                        if (obj[key]) {
+                                            const text = findText(obj[key]);
+                                            if (text) return text;
+                                        }
+                                    }
+                                }
+                                return null;
+                            };
+                            
+                            const text = findText(data);
+                            if (text) {
+                                return text;
+                            }
+                        }
+                        
+                        // 无法解析响应格式
+                        throw new Error(`无法解析API响应格式: ${JSON.stringify(data)}`);
+                        
+                    case 'google':
+                        response = await fetch(`${config.url}?key=${config.apiKey}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                contents: [
+                                    {
+                                        parts: [
+                                            { text: AI.systemPrompt },
+                                            { text: message }
+                                        ]
+                                    }
+                                ],
+                                generationConfig: {
+                                    maxOutputTokens: config.maxOutputTokens,
+                                    temperature: config.temperature
+                                }
+                            })
+                        });
+                        data = await response.json();
+                        console.log('API响应数据:', JSON.stringify(data, null, 2));
+                        
+                        // 更健壮的响应解析
+                        if (data && data.candidates && Array.isArray(data.candidates) && data.candidates.length > 0) {
+                            const candidate = data.candidates[0];
+                            if (candidate && candidate.content && candidate.content.parts && Array.isArray(candidate.content.parts) && candidate.content.parts.length > 0) {
+                                const part = candidate.content.parts[0];
+                                if (part && part.text) {
+                                    return part.text;
+                                }
+                            }
+                        }
+                        if (data && data.choices && Array.isArray(data.choices) && data.choices.length > 0) {
+                            const choice = data.choices[0];
+                            if (choice && choice.message && choice.message.content) {
+                                // 兼容OpenAI格式
+                                return choice.message.content;
+                            }
+                        }
+                        if (data && data.content && Array.isArray(data.content) && data.content.length > 0) {
+                            const contentItem = data.content[0];
+                            if (contentItem && contentItem.text) {
+                                // 兼容Anthropic格式
+                                return contentItem.text;
+                            }
+                        }
+                        if (data && data.response) {
+                            return data.response;
+                        }
+                        if (data && data.result) {
+                            return data.result;
+                        }
+                        if (data && typeof data === 'object') {
+                            // 尝试获取任何可能的文本内容
+                            const textValues = Object.values(data)
+                                .filter(val => typeof val === 'string' || (typeof val === 'object' && val !== null))
+                                .flatMap(val => {
+                                    if (typeof val === 'string') return [val];
+                                    if (Array.isArray(val)) {
+                                        return val
+                                            .filter(item => typeof item === 'string' || (typeof item === 'object' && item !== null))
+                                            .flatMap(item => {
+                                                if (typeof item === 'string') return [item];
+                                                if (typeof item === 'object' && item.text) return [item.text];
+                                                if (typeof item === 'object' && item.message && item.message.content) return [item.message.content];
+                                                if (typeof item === 'object' && item.content && item.content.parts && Array.isArray(item.content.parts)) {
+                                                    return item.content.parts
+                                                        .filter(part => part && part.text)
+                                                        .map(part => part.text);
+                                                }
+                                                return [];
+                                            });
+                                    }
+                                    if (val.text) return [val.text];
+                                    if (val.message && val.message.content) return [val.message.content];
+                                    if (val.content && val.content.parts && Array.isArray(val.content.parts)) {
+                                        const partTexts = val.content.parts
+                                            .filter(part => part && part.text)
+                                            .map(part => part.text);
+                                        return partTexts.length > 0 ? [partTexts[0]] : [];
+                                    }
+                                    return [];
+                                });
+                            
+                            if (textValues.length > 0) {
+                                return textValues[0];
+                            }
+                        }
+                        // 无法解析API响应格式
+                        throw new Error(`无法解析API响应格式: ${JSON.stringify(data)}`);
+                        
+                    case 'custom':
+                        response = await fetch(config.url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                ...config.headers,
+                                'Authorization': config.apiKey ? `Bearer ${config.apiKey}` : ''
+                            },
+                            body: JSON.stringify({
+                                model: config.model,
+                                messages: [
+                                    { role: 'system', content: AI.systemPrompt },
+                                    { role: 'user', content: message }
+                                ]
+                            })
+                        });
+                        data = await response.json();
+                        console.log('API响应数据:', JSON.stringify(data, null, 2));
+                        
+                        // 尝试多种响应格式解析
+                        if (data && data.response) {
+                            return data.response;
+                        } else if (data && data.result) {
+                            return data.result;
+                        } else if (data && data.choices && Array.isArray(data.choices) && data.choices.length > 0 && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+                            // 兼容OpenAI格式
+                            return data.choices[0].message.content;
+                        } else if (data && data.content && Array.isArray(data.content) && data.content.length > 0 && data.content[0] && data.content[0].text) {
+                            // 兼容Anthropic格式
+                            return data.content[0].text;
+                        } else if (data && data.candidates && Array.isArray(data.candidates) && data.candidates.length > 0 && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && Array.isArray(data.candidates[0].content.parts) && data.candidates[0].content.parts.length > 0 && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text) {
+                            // 兼容Google格式
+                            return data.candidates[0].content.parts[0].text;
+                        } else if (data && typeof data === 'object') {
+                            // 尝试获取任何可能的文本内容
+                            const textValues = Object.values(data)
+                                .filter(val => typeof val === 'string' || (typeof val === 'object' && val !== null))
+                                .flatMap(val => {
+                                    if (typeof val === 'string') return [val];
+                                    if (Array.isArray(val)) {
+                                        return val
+                                            .filter(item => typeof item === 'string' || (typeof item === 'object' && item !== null))
+                                            .flatMap(item => {
+                                                if (typeof item === 'string') return [item];
+                                                if (typeof item === 'object' && item.text) return [item.text];
+                                                if (typeof item === 'object' && item.message && item.message.content) return [item.message.content];
+                                                if (typeof item === 'object' && item.content && item.content.parts && Array.isArray(item.content.parts)) {
+                                                    return item.content.parts
+                                                        .filter(part => part && part.text)
+                                                        .map(part => part.text);
+                                                }
+                                                return [];
+                                            });
+                                    }
+                                    if (val.text) return [val.text];
+                                    if (val.message && val.message.content) return [val.message.content];
+                                    if (val.content && val.content.parts && Array.isArray(val.content.parts)) {
+                                        const partTexts = val.content.parts
+                                            .filter(part => part && part.text)
+                                            .map(part => part.text);
+                                        return partTexts.length > 0 ? [partTexts[0]] : [];
+                                    }
+                                    return [];
+                                });
+                            
+                            if (textValues.length > 0) {
+                                return textValues[0];
+                            }
+                        }
+                        // 自定义API返回格式未配置
+                        return '自定义API返回格式未配置，响应内容：' + JSON.stringify(data);
+                        
+                    default:
+                        throw new Error('不支持的API提供商');
+                }
+            } catch (error) {
+                console.error('AI API调用错误:', error);
+                throw error;
+            }
+        }
+
+        // 4. 发送消息
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const sendBtn = document.querySelector('.minimal-send');
+            const text = input.value.trim();
+            if(!text) return;
+
+            // 禁用输入和发送按钮，防止重复发送
+            input.disabled = true;
+            sendBtn.disabled = true;
+
+            // 添加用户消息
+            addBubble(text, 'user');
+            input.value = '';
+
+            // 添加加载中消息
+            const loadingBubble = addBubble(AI.chat.loadingMessage, 'ai');
+
+            try {
+                // 设置请求超时
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('请求超时，请稍后再试')), 30000);
+                });
+
+                // 调用AI API获取回复（带超时控制）
+                const response = await Promise.race([callAIAPI(), timeoutPromise]);
+                
+                // 移除加载中消息
+                loadingBubble.remove();
+                
+                // 添加AI回复
+                addBubble(response, 'ai');
+            } catch (error) {
+                console.error('发送消息错误:', error);
+                // 移除加载中消息
+                loadingBubble.remove();
+                
+                // 添加更具体的错误消息
+                const errorMsg = error.message || AI.chat.errorMessage;
+                addBubble(errorMsg, 'ai');
+            } finally {
+                // 恢复输入和发送按钮
+                input.disabled = false;
+                sendBtn.disabled = false;
+                // 自动聚焦输入框
+                input.focus();
+            }
+        }
+
+        // 事件监听器：回车键和发送按钮发送消息
+        document.addEventListener('DOMContentLoaded', () => {
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            
+            // 回车键发送
+            if (userInput) {
+                userInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+            
+            // 发送按钮点击发送
+            if (sendButton) {
+                sendButton.addEventListener('click', sendMessage);
+            }
+            
+            // 侧边栏按钮事件绑定
+            const sidebarButtons = document.querySelectorAll('.key-btn');
+            sidebarButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.classList.contains('key-1') ? 'card' :
+                               this.classList.contains('key-2') ? 'projects' :
+                               this.classList.contains('key-3') ? 'apps' :
+                               this.classList.contains('key-4') ? 'design' :
+                               this.classList.contains('key-5') ? 'blog' : '';
+                    if (id) {
+                        openDrawer(id, this);
+                    }
+                });
+            });
+            
+            // 关闭按钮事件绑定
+            const closeButtons = document.querySelectorAll('.close-btn');
+            closeButtons.forEach(button => {
+                // 检查按钮是否在详情页中
+                if (button.closest('.detail-nav')) {
+                    button.addEventListener('click', closeDetail);
+                } else {
+                    button.addEventListener('click', closeAllDrawers);
+                }
+            });
+            
+            // 项目卡片点击事件
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const detailId = this.dataset.detail;
+                    if (detailId) {
+                        openDetail(detailId);
+                    }
+                });
+            });
+        });
+
+        function addBubble(text, type) {
+            const container = document.getElementById('chat-messages');
+            const bubble = document.createElement('div');
+            bubble.className = `bubble bubble-${type}`;
+            bubble.innerHTML = text; // 允许 HTML 换行
+            container.appendChild(bubble);
+            container.scrollTop = container.scrollHeight; // 自动滚动到底部
+            
+            // 将消息添加到消息历史数组中
+            if (type === 'user' || type === 'ai') {
+                messageHistory.push({
+                    role: type === 'user' ? 'user' : 'assistant',
+                    content: text
+                });
+                console.log('消息历史已更新:', messageHistory);
+            }
+            
+            return bubble; // 返回创建的气泡元素
+        }
+
+        // 4. 详情页控制
+        function openDetail(detailId) { 
+            // 根据detailId加载不同的详情内容
+            const iframe = document.querySelector('.detail-content iframe');
+            if (iframe) {
+                if (detailId === 'detail-1') {
+                    iframe.src = '项目经历/项目经历1.html';
+                } else if (detailId === 'detail-2') {
+                    iframe.src = '项目经历/项目经历2.html';
+                } else if (detailId === 'detail-3') {
+                    iframe.src = '项目经历/项目经历3.html';
+                }
+            }
+            document.getElementById('detail-overlay').classList.add('active'); 
+        }
+        function closeDetail() { document.getElementById('detail-overlay').classList.remove('active'); }
+        
+        // 5. 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 设置欢迎消息
+            const welcomeMessageEl = document.getElementById('welcome-message');
+            if (welcomeMessageEl) {
+                welcomeMessageEl.innerHTML = AI.chat.welcomeMessage;
+                // 将欢迎消息添加到消息历史数组中
+                messageHistory.push({
+                    role: 'assistant',
+                    content: AI.chat.welcomeMessage
+                });
+                console.log('欢迎消息已添加到消息历史:', messageHistory);
+            }
+            
+            // 连接项目容器滚动条与鼠标滚动
+            const projectContainer = document.querySelector('.project-container');
+            if (projectContainer) {
+                projectContainer.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    projectContainer.scrollLeft += e.deltaY;
+                });
+            }
+            
+            // AI Chat按钮点击事件
+            const aiChatButton = document.querySelector('div.phone-button.key-2');
+            if (aiChatButton) {
+                aiChatButton.addEventListener('click', () => {
+                    // 创建遮罩层和iframe
+                    const overlay = document.createElement('div');
+                    overlay.style = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9998; display: flex; align-items: center; justify-content: center;';
+                    const iframe = document.createElement('iframe');
+                    iframe.src = 'APP/心情泡泡chat/chat.html'; // 指向chat.html
+                    iframe.style = 'width: 100%; height: 100vh; border: none; z-index: 9999; background: white;';
+                    // 创建关闭按钮及逻辑
+                    const closeButton = document.createElement('button');
+                    closeButton.textContent = '×';
+                    closeButton.style = 'position: fixed; top: 20px; right: 20px; z-index: 10000; padding: 8px 12px; border-radius: 50%; background: white; font-size: 24px; cursor: pointer;';
+                    const closeIframe = () => { 
+                        document.body.removeChild(overlay); 
+                        document.body.removeChild(closeButton); 
+                    };
+                    closeButton.addEventListener('click', closeIframe);
+                    overlay.addEventListener('click', closeIframe);
+                    iframe.addEventListener('click', (e) => e.stopPropagation());
+                    // 添加到DOM
+                    overlay.appendChild(iframe);
+                    document.body.appendChild(overlay);
+                    document.body.appendChild(closeButton);
+                });
+            }
+        });
+
+        // 音乐播放器相关代码
+        // 检查页面上是否有TweenMax库，如果没有则使用简单的动画实现
+        if (typeof TweenMax !== 'undefined') {
+            TweenMax.set('#ripple-circle circle', {scale:0.5, transformOrigin:'50% 50%'});
+            TweenMax.fromTo('#svg-line', 2, {x:-2.5}, {x:2.5,repeat:-1,ease:Elastic.easeInOut, yoyo:true});
+        }
+
+        // 简单的悬停效果实现
+        const audioSvg = document.querySelector('.audiosvg');
+        if (audioSvg) {
+            audioSvg.addEventListener('mouseenter', function() {
+                const hoverCircle = this.querySelector('#hover-circle .st4');
+                if (hoverCircle) {
+                    hoverCircle.style.fill = '#7691BA';
+                }
+                const playText = document.querySelector('.play-text');
+                if (playText) {
+                    playText.style.opacity = '1';
+                    playText.style.visibility = 'visible';
+                    playText.style.transform = 'translateX(-50%) translateY(-20px)';
+                    playText.style.transition = 'all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                }
+            });
+
+            audioSvg.addEventListener('mouseleave', function() {
+                const hoverCircle = this.querySelector('#hover-circle .st4');
+                if (hoverCircle) {
+                    hoverCircle.style.fill = '#486CA3';
+                }
+                const playText = document.querySelector('.play-text');
+                if (playText) {
+                    playText.style.opacity = '0';
+                    playText.style.visibility = 'hidden';
+                    playText.style.transform = 'translateX(-50%) translateY(0)';
+                    playText.style.transition = 'all 0.35s cubic-bezier(0.6, -0.28, 0.735, 0.045)';
+                }
+            });
+
+            audioSvg.addEventListener('click', function() {
+                const spinDisc = this.querySelector('#svg-audio');
+                const rippleCircle = this.querySelectorAll('#ripple-circle circle');
+                const activeBox = this.previousElementSibling;
+                
+                if (spinDisc) {
+                    spinDisc.style.animation = 'spin 2s linear infinite';
+                }
+                
+                if (rippleCircle.length > 0) {
+                    rippleCircle.forEach((circle, index) => {
+                        circle.style.animation = `ripple 2.1s linear infinite ${index * 0.7}s`;
+                    });
+                }
+                
+                if (activeBox) {
+                    activeBox.style.display = 'block';
+                }
+                
+                const playText = document.querySelector('.play-text');
+                if (playText) {
+                    playText.style.opacity = '0';
+                    playText.style.visibility = 'hidden';
+                }
+            });
+        }
+
+        const activeBox = document.querySelector('.active-box');
+        if (activeBox) {
+            activeBox.addEventListener('mouseenter', function() {
+                const hoverCircle = this.parentElement.querySelector('#hover-circle .st4');
+                if (hoverCircle) {
+                    hoverCircle.style.fill = '#7691BA';
+                }
+                const pauseText = document.querySelector('.pause-text');
+                if (pauseText) {
+                    pauseText.style.opacity = '1';
+                    pauseText.style.visibility = 'visible';
+                    pauseText.style.transform = 'translateX(-50%) translateY(-20px)';
+                    pauseText.style.transition = 'all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                }
+            });
+
+            activeBox.addEventListener('mouseleave', function() {
+                const hoverCircle = this.parentElement.querySelector('#hover-circle .st4');
+                if (hoverCircle) {
+                    hoverCircle.style.fill = '#486CA3';
+                }
+                const pauseText = document.querySelector('.pause-text');
+                if (pauseText) {
+                    pauseText.style.opacity = '0';
+                    pauseText.style.visibility = 'hidden';
+                    pauseText.style.transform = 'translateX(-50%) translateY(0)';
+                    pauseText.style.transition = 'all 0.35s cubic-bezier(0.6, -0.28, 0.735, 0.045)';
+                }
+            });
+
+            activeBox.addEventListener('click', function() {
+                this.style.display = 'none';
+                
+                const audioSvg = this.parentElement.querySelector('.audiosvg');
+                if (audioSvg) {
+                    const spinDisc = audioSvg.querySelector('#svg-audio');
+                    if (spinDisc) {
+                        spinDisc.style.animation = 'none';
+                    }
+                    
+                    const rippleCircle = audioSvg.querySelectorAll('#ripple-circle circle');
+                    if (rippleCircle.length > 0) {
+                        rippleCircle.forEach(circle => {
+                            circle.style.animation = 'none';
+                            circle.style.scale = '0.5';
+                        });
+                    }
+                }
+            });
+        }
+
+        // 添加自定义动画关键帧
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); transform-origin: 125.5px 154px; }
+                to { transform: rotate(360deg); transform-origin: 125.5px 154px; }
+            }
+            @keyframes ripple {
+                0% { transform: scale(0.5); opacity: 0.5; transform-origin: 50% 50%; }
+                100% { transform: scale(20); opacity: 0; transform-origin: 50% 50%; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // AI Chat按钮点击事件
+        document.addEventListener('DOMContentLoaded', () => {
+            // 定位AI Chat按钮
+            const aiChatButton = document.querySelector('div.phone-button.key-2');
+            
+            if (aiChatButton) {
+                aiChatButton.addEventListener('click', () => {
+                    // 创建遮罩层
+                    const overlay = document.createElement('div');
+                    overlay.style.position = 'fixed';
+                    overlay.style.top = '0';
+                    overlay.style.left = '0';
+                    overlay.style.width = '100%';
+                    overlay.style.height = '100%';
+                    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                    overlay.style.zIndex = '9998';
+                    overlay.style.display = 'flex';
+                    overlay.style.alignItems = 'center';
+                    overlay.style.justifyContent = 'center';
+                    
+                    // 创建iframe
+                    const iframe = document.createElement('iframe');
+                    // 注意：这里需要一个可以访问chat.jsx的HTML文件，而不是直接加载jsx文件
+                    // 由于React组件需要编译，我们可以使用一个简单的HTML文件来加载它
+                    iframe.src = 'APP/心情泡泡chat/chat.html';
+                    iframe.style.width = '100%';
+                    iframe.style.height = '100vh';
+                    iframe.style.border = 'none';
+                    iframe.style.zIndex = '9999';
+                    iframe.style.backgroundColor = 'white';
+                    
+                    // 创建关闭按钮
+                    const closeButton = document.createElement('button');
+                    closeButton.textContent = '×';
+                    closeButton.style.position = 'fixed';
+                    closeButton.style.top = '20px';
+                    closeButton.style.right = '20px';
+                    closeButton.style.zIndex = '10000';
+                    closeButton.style.padding = '8px 12px';
+                    closeButton.style.border = 'none';
+                    closeButton.style.borderRadius = '50%';
+                    closeButton.style.backgroundColor = 'white';
+                    closeButton.style.color = 'black';
+                    closeButton.style.fontSize = '24px';
+                    closeButton.style.cursor = 'pointer';
+                    closeButton.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+                    
+                    // 关闭功能
+                    const closeIframe = () => {
+                        document.body.removeChild(overlay);
+                        document.body.removeChild(closeButton);
+                    };
+                    
+                    closeButton.addEventListener('click', closeIframe);
+                    overlay.addEventListener('click', closeIframe);
+                    
+                    // 防止点击iframe内部时关闭
+                    iframe.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
+                    
+                    // 添加到DOM
+                    overlay.appendChild(iframe);
+                    document.body.appendChild(overlay);
+                    document.body.appendChild(closeButton);
+                });
+            }
+        });
+    </script>
+
+    <script>
+        // 音频播放相关 - 放在全局作用域
+        let audioMp3 = null;
+        let currentTrack = 0;
+        const tracks = ['Music/千晴.mp3', 'Music/荔枝.mp3'];
+
+        function initAudio() {
+            if (!audioMp3) {
+                audioMp3 = new Audio();
+                audioMp3.src = tracks[currentTrack];
+                audioMp3.loop = true;
+            }
+        }
+
+        function playAudio() {
+            initAudio();
+            audioMp3.play().catch(error => {
+                console.log('播放失败:', error);
+            });
+        }
+
+        function pauseAudio() {
+            if (audioMp3 && !audioMp3.paused) {
+                audioMp3.pause();
+            }
+        }
+
+        // 页面加载完成后自动播放音乐
+        document.addEventListener('DOMContentLoaded', function() {
+            playAudio();
+            
+            // 初始显示为播放状态
+            const activeBox = document.querySelector('.active-box');
+            const audioSvg = document.querySelector('.audiosvg');
+            
+            if (activeBox) {
+                activeBox.style.display = 'block';
+            }
+            
+            if (audioSvg) {
+                const spinDisc = audioSvg.querySelector('#svg-audio');
+                const rippleCircle = audioSvg.querySelectorAll('#ripple-circle circle');
+                
+                if (spinDisc) {
+                    spinDisc.style.animation = 'spin 2s linear infinite';
+                }
+                
+                if (rippleCircle.length > 0) {
+                    rippleCircle.forEach((circle, index) => {
+                        circle.style.animation = `ripple 2.1s linear infinite ${index * 0.7}s`;
+                    });
+                }
+                
+                const playText = document.querySelector('.play-text');
+                if (playText) {
+                    playText.style.opacity = '0';
+                    playText.style.visibility = 'hidden';
+                }
+            }
+        });
+    </script>
+
+    <script>
+        class Example {
+            constructor(options) {
+                this.root = options.root;
+
+                this.init();
+
+                setTimeout(this.showImages.bind(this), 1000);
+            }
+
+            init() {
+                this.scroll = new LocomotiveScroll({
+                    el: this.root,
+                    direction: 'horizontal',
+                    smooth: true,
+                    lerp: 0.05,
+                    tablet: {
+                        smooth: true
+                    },
+                    smartphone: {
+                        smooth: true
+                    }
+                });
+
+                this.images = this.root.querySelectorAll('.image');
+
+                [].forEach.call(this.images, (image) => {
+                    image.addEventListener('click', () => {
+                        image.classList.add('-clicked');
+                        this.hideImages();
+                    });
+                });
+            }
+
+            showImages() {
+                [].forEach.call(this.images, (image) => {
+                    image.classList.remove('-clicked');
+                    image.classList.add('-active');
+                });
+            }
+
+            hideImages() {
+                [].forEach.call(this.images, (image) => {
+                    image.classList.remove('-active');
+                });
+
+                setTimeout(this.showImages.bind(this), 2000);
+            }
+        }
+
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const example = new Example({
+                root: document.querySelector('.scroll-animations-example')
+            });
+        });
+    </script>
+
+    <!-- 音乐播放器 -->
+    <div class="audio-container">
+      <div class="audiosvg-container">
+        <h1 class="play-text">play</h1>
+        <h1 class="pause-text">pause</h1>
+        <div class="active-box" onclick="pauseAudio()"></div>
+        <svg class="audiosvg" onclick="playAudio()" viewBox="0 0 250 250" style="enable-background:new 0 0 250 250;" xml:space="preserve">
+          <style type="text/css">
+                            .st0{fill:none;stroke:#486CA3;stroke-width:5.6943;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+                                    .st1{fill:#7691BA;}
+                                    .st2{fill:none;stroke:#1A478C;stroke-width:5.8983;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+                                    .st3{fill:#1A478C;}
+                                    .st4{fill:#486CA3;}
+                                    .st5{fill:none;stroke:#1A478C;stroke-width:7.5924;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+                                    .st6{fill:#FFFFFF;}
+                                    .st7{fill:none;stroke:#7691BA;stroke-width:13.2866;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+                                    .st8{fill:none;stroke:#486CA3;stroke-width:4.4082;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+                                    .st9{fill:none;stroke:#fff;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+                                </style>
+          <g>
+            <g>
+              <path class="st1" d="M72.5,38.6c0-0.1,0.1-0.1,0.1-0.2c0.1-0.1,0.1-0.2,0.2-0.2c0.1-0.1,0.2-0.1,0.3-0.2c0.1,0,0.2-0.1,0.3-0.1
+                                                    h4.6c0.2,0,0.4,0.1,0.5,0.2c0.1,0.1,0.3,0.2,0.3,0.3l0.5,1l9.5,24.4c0.1,0.2,0.1,0.4-0.1,0.6c-0.1,0.2-0.4,0.2-0.7,0.2h-5.2
+                                                    c-0.3,0-0.5-0.1-0.6-0.2c-0.2-0.1-0.3-0.3-0.4-0.5c-0.2-0.6-0.5-1.2-0.7-1.8c-0.2-0.6-0.5-1.2-0.7-1.8H71
+                                                    c-0.2,0.6-0.5,1.2-0.7,1.8c-0.2,0.6-0.5,1.2-0.7,1.8c-0.2,0.4-0.5,0.7-0.9,0.7h-5.3c-0.2,0-0.4-0.1-0.6-0.2
+                                                    c-0.2-0.1-0.2-0.3-0.1-0.5L72.5,38.6z M75.8,46.3c-0.2,0.6-0.5,1.3-0.7,2c-0.2,0.7-0.5,1.4-0.7,2.1c-0.2,0.7-0.5,1.4-0.7,2.1
+                                                    c-0.2,0.7-0.5,1.4-0.7,2h5.5L75.8,46.3z"/>
+                                                <path class="st1" d="M99.3,54c0,0.9,0.1,1.6,0.4,2.3c0.2,0.6,0.6,1.1,1,1.5c0.4,0.4,0.9,0.7,1.4,0.9s1.1,0.3,1.7,0.3
+                                                    c0.6,0,1.2-0.1,1.7-0.3c0.5-0.2,1-0.5,1.4-0.9c0.4-0.4,0.7-0.9,1-1.5s0.4-1.3,0.4-2.1V38.7c0-0.2,0.1-0.4,0.2-0.6
+                                                    c0.1-0.2,0.4-0.2,0.6-0.2h5.3c0.3,0,0.5,0.1,0.6,0.2c0.2,0.2,0.2,0.3,0.2,0.5v15.2c0,2.1-0.3,3.9-0.9,5.3
+                                                    c-0.6,1.4-1.4,2.6-2.5,3.4c-1,0.9-2.3,1.5-3.6,1.9s-2.8,0.6-4.3,0.6c-1.5,0-3-0.2-4.3-0.6c-1.4-0.4-2.6-1-3.6-1.9
+                                                    c-1-0.9-1.9-2-2.5-3.5c-0.6-1.4-0.9-3.2-0.9-5.2V38.7c0-0.2,0.1-0.4,0.2-0.5c0.1-0.2,0.3-0.2,0.5-0.2h5.4c0.2,0,0.4,0.1,0.6,0.2
+                                                    c0.2,0.2,0.3,0.3,0.3,0.6V54z"/>
+                                                <path class="st1" d="M143.5,51.3c0,1.3-0.2,2.5-0.5,3.6c-0.3,1.1-0.8,2.2-1.4,3.2c-0.6,1-1.3,1.9-2.2,2.7
+                                                    c-0.8,0.8-1.8,1.5-2.8,2.1c-1,0.6-2.1,1-3.3,1.3c-1.2,0.3-2.4,0.5-3.7,0.5h-8.9c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.3-0.3-0.3-0.6
+                                                    V38.7c0-0.3,0.1-0.5,0.2-0.6c0.1-0.2,0.3-0.2,0.6-0.2h8.9c1.3,0,2.5,0.2,3.6,0.5s2.3,0.8,3.3,1.3c1,0.6,1.9,1.3,2.8,2.1
+                                                    c0.8,0.8,1.6,1.7,2.2,2.7c0.6,1,1.1,2.1,1.4,3.2S143.5,50,143.5,51.3z M127,44.3v13.8h1.5c0.3,0,0.5,0,0.8,0c0.3,0,0.5,0,0.8-0.1
+                                                    c0.9-0.1,1.7-0.3,2.5-0.7s1.5-0.8,2-1.4c0.6-0.6,1-1.3,1.4-2.1c0.3-0.8,0.5-1.7,0.5-2.6c0-1-0.2-1.9-0.6-2.8
+                                                    c-0.4-0.8-0.9-1.6-1.5-2.2c-0.6-0.6-1.4-1.1-2.3-1.4c-0.9-0.3-1.8-0.5-2.8-0.5H127z"/>
+                                                <path class="st1" d="M148.2,38.7c0-0.2,0.1-0.4,0.2-0.6c0.1-0.2,0.3-0.2,0.6-0.2h5.3c0.2,0,0.4,0.1,0.6,0.2s0.3,0.3,0.3,0.6v25.1
+                                                    c0,0.5-0.3,0.8-0.9,0.8H149c-0.5,0-0.8-0.3-0.8-0.8V38.7z"/>
+                                                <path class="st1" d="M159.8,51.3c0-1.3,0.2-2.5,0.5-3.7s0.8-2.3,1.4-3.3s1.3-2,2.2-2.8c0.8-0.8,1.8-1.6,2.8-2.2
+                                                    c1-0.6,2.1-1.1,3.3-1.4s2.4-0.5,3.7-0.5c1.3,0,2.5,0.2,3.7,0.5s2.3,0.8,3.3,1.4c1,0.6,2,1.3,2.8,2.2c0.8,0.8,1.6,1.8,2.2,2.8
+                                                    c0.6,1,1.1,2.1,1.4,3.3s0.5,2.4,0.5,3.7s-0.2,2.5-0.5,3.7c-0.3,1.2-0.8,2.3-1.4,3.3c-0.6,1-1.3,1.9-2.2,2.8
+                                                    c-0.8,0.8-1.8,1.6-2.8,2.2c-1,0.6-2.1,1.1-3.3,1.4c-1.2,0.3-2.4,0.5-3.7,0.5c-1.3,0-2.5-0.2-3.7-0.5c-1.2-0.3-2.3-0.8-3.3-1.4
+                                                    c-1-0.6-1.9-1.3-2.8-2.2s-1.6-1.8-2.2-2.8s-1.1-2.1-1.4-3.3C159.9,53.8,159.8,52.5,159.8,51.3z M166.7,51.3c0,1,0.2,1.9,0.5,2.8
+                                                    c0.3,0.9,0.8,1.6,1.4,2.3c0.6,0.6,1.3,1.1,2.1,1.5c0.8,0.4,1.7,0.5,2.7,0.5c1,0,1.9-0.2,2.7-0.5s1.6-0.9,2.2-1.5
+                                                    c0.6-0.6,1.1-1.4,1.4-2.3c0.3-0.9,0.5-1.8,0.5-2.8c0-1-0.2-1.9-0.5-2.8c-0.3-0.9-0.8-1.6-1.4-2.3c-0.6-0.6-1.3-1.2-2.2-1.5
+                                                    s-1.7-0.6-2.7-0.6c-1,0-1.9,0.2-2.7,0.6c-0.8,0.4-1.5,0.9-2.1,1.5c-0.6,0.6-1.1,1.4-1.4,2.3C166.9,49.3,166.7,50.3,166.7,51.3z"/>
+              </g>
+            <g>
+              <g id="svg-audio">
+                                                    <circle class="st5" cx="125.5" cy="154" r="66.3"/>
+                                                    <path class="st3" d="M64.3,179.5c5.1,12.2,13.7,22.6,24.6,29.8l36.6-55.2L64.3,179.5z"/>
+                                                    <polygon class="st3" points="181.4,118.5 170.8,106.4 125.5,154 			"/>
+                                                    <g>
+                                                      <g id="hover-circle">
+                                                        <circle class="st4" cx="125.5" cy="154" r="24.7"/>
+                                                      </g>
+                                                      
+                                                      <g id="ripple-circle">
+                                                        <circle class="st9" cx="125.5" cy="154" r="9.6"/>
+                                                        <circle class="st9" cx="125.5" cy="154" r="9.6"/>
+                                                        <circle class="st9" cx="125.5" cy="154" r="9.6"/>
+                                                      </g>
+                                                      <circle class="st3" cx="125.5" cy="154" r="9.6"/>
+                                                    </g>
+                                                </g>
+                                                <path class="st2" d="M202.8,128.2H214c3.8,0,6.8-2.4,6.8-5.4V18.7c0-3-3.1-5.4-6.8-5.4H36c-3.8,0-6.8,2.4-6.8,5.4v104.1
+                                                    c0,3,3.1,5.4,6.8,5.4h13.1"/>
+                                                <path class="st7" d="M160,196.7l12.2,16.5c2.5,3.3,6.4,6.3,11.6,7.4"/>
+                                                <circle class="st8" cx="203.1" cy="224.6" r="9.9"/>
+                                                <g>
+                                                  <g>
+                                                    <circle class="st1" cx="189" cy="82.3" r="4.4"/>
+                                                    <circle class="st4" cx="189" cy="98.1" r="4.4"/>
+                                                  </g>
+                                                </g>
+                                                <path class="st4" d="M169.5,197.3c1.9,2.5,1.5,6-1,8l-2.2,1.7c-2.5,1.9-6,1.5-8-1l-7.3-9.4c-1.9-2.5-1.5-6,1-8l2.2-1.7
+                                                    c2.5-1.9,6-1.5,8,1L169.5,197.3z"/>
+                                                <path class="st8" d="M160,196.7l12.2,16.5c2.5,3.3,6.4,6.3,11.6,7.4c6.1,1.2,19.2,3.8,19.2,3.8"/>
+                                            </g>
+                                            <g id="svg-line">
+                                                <line class="st0" x1="162.7" y1="236.7" x2="87.3" y2="236.7"/>
+                                            </g>
+                                        </g>
+                                        </svg>
+      </div>
+    </div>
+
+</body>
+</html>
