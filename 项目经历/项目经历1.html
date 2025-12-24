@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目呈现 | AI 校园心理助手</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 更有活力的配色方案 */
+            --bg-paper: #fffef5; /* 暖白纸张 */
+            --ink-main: #1a1c20; /* 深墨色 */
+            --pop-red: #ff5e57; /* 活力红 - 强调痛点与热情 */
+            --pop-blue: #3c40c6; /* 沉稳蓝 - 强调技术与逻辑 */
+            --pop-yellow: #ffd32a; /* 荧光黄 - 高亮重点 */
+            --accent-green: #0be881; /* 治愈绿 */
+        }
+
+        body {
+            background-color: var(--bg-paper);
+            color: var(--ink-main);
+            font-family: 'Noto Sans SC', sans-serif;
+            overflow-x: hidden;
+            background-image: radial-gradient(#d1d8e0 1px, transparent 1px);
+            background-size: 20px 20px; /* 点阵背景增加质感 */
+        }
+
+        .serif { font-family: 'Noto Serif SC', serif; }
+        .handwriting { 
+            font-family: 'Zhi Mang Xing', cursive; 
+            transform: rotate(-2deg);
+        }
+
+        /* 杂志风格大标题 */
+        .headline {
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        /* 荧光笔高亮效果 */
+        .highlight {
+            background: linear-gradient(120deg, rgba(255, 211, 42, 0) 0%, rgba(255, 211, 42, 0.6) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 88%;
+            padding: 0 4px;
+        }
+
+        /* 卡片样式 */
+        .card-pop {
+            background: white;
+            border: 2px solid var(--ink-main);
+            box-shadow: 6px 6px 0px var(--ink-main);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card-pop:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px var(--pop-blue);
+        }
+
+        /* 滚动动画类 - 初始状态 */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        /* 激活状态 */
+        .active {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1);
+        }
+
+        /* 装饰性胶带 */
+        .tape {
+            background-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            backdrop-filter: blur(2px);
+            transform: rotate(3deg);
+        }
+
+        /* Iframe 容器模拟 */
+        .device-mockup {
+            border: 4px solid var(--ink-main);
+            border-radius: 20px;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 报纸分栏线 */
+        .column-rule {
+            border-left: 1px solid var(--ink-main);
+        }
+
+        @media (max-width: 768px) {
+            .column-rule { border-left: none; border-top: 1px solid var(--ink-main); margin-top: 2rem; padding-top: 2rem; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- 顶部导航/期号 -->
+    <nav class="flex justify-between items-center max-w-6xl mx-auto mb-12 border-b-2 border-black pb-4 reveal-up">
+        <div class="font-bold text-xl tracking-tighter bg-black text-white px-2">CASE #01</div>
+        <div class="serif italic text-lg">Sunburntsalmon的实习手记：心理学 × AI</div>
+        <div class="text-sm font-mono">2025 ARCHIVE</div>
+    </nav>
+
+    <!-- 封面故事 Hero Section -->
+    <header class="max-w-6xl mx-auto mb-24 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div class="md:col-span-7 relative z-10 reveal-left">
+            <span class="inline-block bg-yellow-300 px-3 py-1 text-sm font-bold border border-black mb-4 transform -rotate-2">项目中断也要复盘</span>
+            <h1 class="headline serif font-black text-5xl md:text-7xl mb-6 text-gray-900">
+                AI校园心理助手<br>
+                当满分试卷<br>比<span class="text-indigo-700">心理健康</span>更重要...
+            </h1>
+            <p class="text-xl md:text-2xl font-light leading-relaxed mb-8 text-gray-700">
+                在校园角落建个“树洞”，用 AI 倾听那些<span class="highlight">沉默的呼救</span>。
+            </p>
+            <div class="flex flex-wrap gap-4 text-sm font-bold">
+                <span class="px-3 py-1 border border-black rounded-full bg-white">G端定制产品</span>
+                <span class="px-3 py-1 border border-black rounded-full bg-white">多模态情绪检测与沙盘测评</span>
+                <span class="px-3 py-1 border border-black rounded-full bg-white">聊天智能体</span>
+            </div>
+            
+            <!-- 手写批注 -->
+            <div class="absolute -right-4 top-0 text-red-500 handwriting text-2xl w-40 hidden md:block">
+                这是我第一份正经工作，<br>我逐渐摆脱学生思维
+            </div>
+        </div>
+
+        <div class="md:col-span-5 relative reveal-scale transition-delay-200">
+            <!-- 图片占位：主视觉 -->
+            <div class="w-full aspect-[4/5] bg-gray-200 border-4 border-black shadow-[12px_12px_0px_rgba(0,0,0,1)] flex flex-col items-center justify-center p-8 text-center bg-cover bg-center" style="background-image: url('https://i.postimg.cc/0ML9R7fw/cover-image101.png');">
+                <span class="bg-white p-2 border border-black text-xs font-mono mb-2">PROJECT VISION</span>
+                <p class="bg-white p-2 border border-black serif italic font-bold text-xl mb-2">“不只是冰冷的问卷，<br>而是一个能听懂哭声的伙伴”</p>
+            </div>
+            <!-- 贴纸元素 -->
+            <div class="absolute -bottom-6 -left-6 bg-white p-4 border-2 border-black rotate-3 shadow-lg max-w-[200px]">
+                <p class="text-xs font-mono text-gray-500">我的角色</p>
+                <p class="font-bold text-indigo-600">心理学专业支持 &<br>AI 产品助理</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto">
+        
+        <!-- 板块一：犀利洞察 -->
+        <section class="mb-32 reveal-up">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-1 flex-grow bg-black"></div>
+                <h2 class="text-3xl font-black italic uppercase">需求与洞察</h2>
+                <div class="h-1 flex-grow bg-black"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="prose prose-lg">
+                    <h3 class="serif font-bold text-2xl mb-4 text-red-600">痛点直击：<br>只有皮囊，没有灵魂？</h3>
+                    <p class="mb-4">
+                        作为心理学专业的学生，我在实习中看到了校园预警系统的尴尬现状：人手严重不足，所谓的“心理筛查”往往只是一张冰冷的纸质问卷。
+                    </p>
+                    <p class="mb-4">
+                        市面上的竞品呢？要么是生硬的量表堆砌，要么是聊两句就露馅的“人工智障”。很多微调模型<span class="font-bold bg-yellow-200 px-1">根本不懂什么是真正的咨询</span>。
+                    </p>
+                    <div class="bg-gray-100 p-4 border-l-4 border-black italic text-gray-600">
+                        “经验主义是咨询行业的魔咒。<br>缺乏专业人士深度参与是糟糕的产品设计的根源。”
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- 策略卡片 -->
+                    <div class="card-pop p-4 bg-blue-50">
+                        <div class="text-4xl mb-2">📉</div>
+                        <h4 class="font-bold mb-2">传统问卷的局限</h4>
+                        <p class="text-xs">学生往往因为敷衍心态乱填，数据失真。</p>
+                    </div>
+                    <div class="card-pop p-4 bg-red-50">
+                        <div class="text-4xl mb-2">🆘</div>
+                        <h4 class="font-bold mb-2">人手危机</h4>
+                        <p class="text-xs">几千个学生，只有几个心理老师，预警总是滞后。</p>
+                    </div>
+                    <div class="card-pop col-span-2 p-6 bg-white relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-black text-white text-xs px-2 py-1">我的策略</div>
+                        <h4 class="font-bold text-lg mb-2">AI 的正确打开方式</h4>
+                        <ul class="list-disc list-inside text-sm space-y-2">
+                            <li><span class="font-bold">电子沙盘 + 视觉大模型解读：</span> 敞开潜意识的窗口</li>
+                            <li><span class="font-bold">多模态检测：</span> 哭声检测（基于实体小屋）</li>
+                            <li><span class="font-bold">咨询 Bot：</span> 模块化 CoT 引导</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 板块二：核心贡献 (CoT) -->
+        <section class="mb-32 bg-indigo-900 text-white p-8 md:p-16 rounded-3xl relative overflow-hidden reveal-up">
+            <!-- 背景装饰 -->
+            <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style="background-image: linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 50%, #ffffff 50%, #ffffff 75%, transparent 75%, transparent); background-size: 20px 20px;"></div>
+
+            <div class="relative z-10 text-center mb-12">
+                <span class="text-yellow-400 font-mono tracking-widest text-sm">我的核心贡献</span>
+                <h2 class="serif text-4xl md:text-5xl font-bold mt-2">给 AI 装上“心理咨询师的大脑”</h2>
+                <p class="mt-4 text-indigo-200 max-w-2xl mx-auto">为了提高对话质量，我没有粗暴地进行 SFT（微调），而是设计了一套<span class="text-white font-bold border-b-2 border-yellow-400">模块化 CoT 架构</span>。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                <!-- 步骤 1 -->
+                <div class="bg-white text-black p-6 rounded-lg transform rotate-[-2deg] hover:rotate-0 transition duration-300">
+                    <div class="text-xs font-bold text-gray-400 mb-2">STEP 1: 拆解 SFBT</div>
+                    <h3 class="font-bold text-xl mb-4">模块化 CoT 积木</h3>
+                    <p class="text-sm">我将焦点解决短期治疗（SFBT）拆成了小块：</p>
+                    <ul class="text-sm mt-2 space-y-1 text-gray-600 font-mono">
+                        <li>[Block A] 倾诉阶段: <br>情绪反馈+需求分析+实时督导</li>
+                        <li>[Block B] 目标和聚焦阶段:  <br>情绪反馈+需求分析+聚焦技术+实时督导</li>
+                        <li>[Block C] 例外探索阶段:  <br>情绪反馈+实时督导+例外探索</li>
+                        <li>[Block D] 尝试改变阶段:  <br>情绪反馈+实时督导+促进改变+建议工具包</li>
+                    </ul>
+                </div>
+
+                <!-- 步骤 2 -->
+                <div class="bg-yellow-400 text-black p-6 rounded-lg transform scale-105 shadow-xl">
+                    <div class="text-xs font-bold text-black/50 mb-2">STEP 2: 动态组装</div>
+                    <h3 class="font-bold text-xl mb-4">大小模型协作</h3>
+                    <p class="text-sm font-bold">小模型生成思维链 → 大模型生成对话</p>
+                    <div class="mt-4 border-t border-black pt-4 text-xs">
+                        <p>“用心理方向微调模型复刻咨询师的思考而非言语。<br>这种分工既节省token成本，又能在精准控制 AI 在不同咨询阶段的话术方向的前提下保证对话的文本质量，不至于满嘴术语、像个伪人。”</p>
+                    </div>
+                </div>
+
+                <!-- 步骤 3 -->
+                <div class="bg-white text-black p-6 rounded-lg transform rotate-[2deg] hover:rotate-0 transition duration-300">
+                    <div class="text-xs font-bold text-gray-400 mb-2">STEP 3: 输出小巧思</div>
+                    <h3 class="font-bold text-xl mb-4">可视化情绪反馈</h3>
+                    <p class="text-sm">重要的不是AI懂不懂用户，而是用户有没有感觉到AI试图懂TA的情绪。可视化反馈设计从功能上确保，AI无论何时都在“积极关注”用户。</p>
+                    <div class="mt-4 p-2 bg-gray-100 rounded text-xs font-mono text-gray-500">
+                        > 请你分析来访者的显性/隐性情绪词，并使用0-10量表量化强度表现你体会到的来访的当下情绪。需要注意的是，矛盾的情感同样值得注意。<br>示例：<br>“我体会到你现在：😔 焦虑(7/10) | 🥵 压力(6/10)”
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 手写批注 -->
+            <div class="absolute bottom-8 right-12 text-yellow-300 handwriting text-xl hidden md:block rotate-[-5deg]">
+                这是放眼整个行业也很有创新意识的尝试！<br>并且可以直接落地应用！
+            </div>
+        </section>
+
+        <!-- 板块三：沙盘与人设 -->
+        <section class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-24 reveal-up">
+            
+            <!-- 左侧：沙盘分析 -->
+            <div class="md:col-span-5 flex flex-col justify-center">
+                <h2 class="text-3xl font-black mb-6">👁️ 读懂潜意识：<br>视觉大模型 与 电子沙盘</h2>
+                <p class="text-gray-700 mb-6">
+                    除了对话，我也自学了沙盘治疗资料，设计了结构化报告架构。利用视觉大模型，从四个维度分析学生的内心世界。
+                </p>
+                <div class="bg-white border-2 border-black p-4 shadow-[4px_4px_0px_#000]">
+                    <div class="font-bold border-b border-gray-200 pb-2 mb-2">我的结构化报告架构</div>
+                    <div class="accordion space-y-2 font-mono">
+                        <!-- 01. 整体印象 -->
+                        <div class="accordion-item border-b border-gray-200 pb-2">
+                            <button class="accordion-header flex justify-between w-full text-left text-sm font-normal" aria-expanded="false">
+                                <span>01. 整体印象</span>
+                                <span class="text-gray-400">空间/色彩/阶段 <span class="accordion-icon">▼</span></span>
+                            </button>
+                            <div class="accordion-content text-xs text-gray-600 hidden mt-2 overflow-hidden transition-all duration-300">
+                                <p><strong>首要印象：</strong>梦幻、多元、探索。沙盘中充满了各种富有想象力的元素，且沙具种类丰富，仿佛构建了一个充满童趣和好奇的内心世界。</p>
+                                <p><strong>空间利用：</strong>沙盘被较充分地利用，沙具分布在沙盘的各个区域，但整体倾向于中心偏右和偏上区域，左侧下方相对留白较多。这种分布可能表明小庄的意识层面（右侧）和精神层面（上方）的活动较为活跃，她可能正在积极地探索外部世界和思考精神层面的议题。</p>
+                                <p><strong>色彩运用：</strong>沙具颜色较为丰富，有鲜明的彩虹、绿色的植物、黑白动物等，整体呈现出一种活泼、明亮的色彩特征，但同时也有黑色的动物（豹子、鲸鱼、马），带来一些深沉或神秘的对比。</p>
+                                <p><strong>初步主题：</strong>从沙盘的意象来看，初步主题可能是治愈主题中的“连接”与“变化”，以及转化主题中的“蜕变”。整个沙盘仿佛在讲述一个关于生命成长、寻求联结与内在转变的故事。</p>
+                                <p><strong>沙盘阶段：</strong>根据沙盘的整体特征，其可能处于前进解决阶段。沙具的摆放相对有序，没有明显的冲突或破坏性元素，虽然有对比性的沙具，但它们更多地是共存而非对抗。<br>（略）</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 02. 主题分析 -->
+                        <div class="accordion-item border-b border-gray-200 pb-2">
+                            <button class="accordion-header flex justify-between w-full text-left text-sm font-normal" aria-expanded="false">
+                                <span>02. 主题分析</span>
+                                <span class="text-gray-400">冲突/防御机制 <span class="accordion-icon">▼</span></span>
+                            </button>
+                            <div class="accordion-content text-xs text-gray-600 hidden mt-2 overflow-hidden transition-all duration-300">
+                                <p><strong>主题总结：</strong>沙盘中沙具种类繁多，包括建筑、多种动物、植物、人物以及彩虹和蛋糕等。这些沙具分布在沙盘的各个区域，但中心偏右和偏上的部分沙具更为密集。</p>
+                                <p><strong>心理需求：</strong>被理解与被接纳的需求、自我成长与滋养的需求、情感连接与希望的需求。</p>
+                                <p><strong>内在冲突：</strong>深层情感的表达与呈现、独立性与依赖性、内在丰富性与现实世界的表达之间可能存在一些张力。</p>
+                                <p><strong>防御机制：</strong>理想化、象征化、退行等防御机制可能在小庄的情感表达中起到一定作用。<br>（略）</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 03. 物体分析 -->
+                        <div class="accordion-item border-b border-gray-200 pb-2">
+                            <button class="accordion-header flex justify-between w-full text-left text-sm font-normal" aria-expanded="false">
+                                <span>03. 物体分析</span>
+                                <span class="text-gray-400">显著元素隐喻 <span class="accordion-icon">▼</span></span>
+                            </button>
+                            <div class="accordion-content text-xs text-gray-600 hidden mt-2 overflow-hidden transition-all duration-300">
+                                <p><strong>主要物体：</strong></p>
+                                <p>1. <strong>鲸鱼与彩虹：</strong>共同占据了沙盘中部偏左的位置，形成了沙盘的视觉焦点之一。鲸鱼的深邃与彩虹的明亮形成对比，象征着深层情感与希望的连接。</p>
+                                <p>2. <strong>婴儿与蛋糕：</strong>放置在沙盘的右上方，靠近意识和外部世界，且处于精神层面。象征着新生、纯真和对自我成长的渴望。</p>
+                                <p>3. <strong>长椅与灯：</strong>放置在沙盘的前沿（靠近咨询师一侧），位置非常醒目。象征着休息、等待或邀请外界的关注和连接。</p>
+                                <p><strong>排列逻辑：</strong>沙盘的排列呈现出一种多元化、共存与探索的逻辑。沙具并非严格按照某种几何图形排列，而是散布在沙盘的各个区域，显示出一种自然流淌和自由表达的状态。<br>（略）</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 04. 咨询与干预建议 -->
+                        <div class="accordion-item border-b border-gray-200 pb-2">
+                            <button class="accordion-header flex justify-between w-full text-left text-sm font-normal" aria-expanded="false">
+                                <span>04. 咨询与干预建议</span>
+                                <span class="text-gray-400">探索方向/支持 <span class="accordion-icon">▼</span></span>
+                            </button>
+                            <div class="accordion-content text-xs text-gray-600 hidden mt-2 overflow-hidden transition-all duration-300">
+                                <p><strong>初步评估：</strong>基于沙盘呈现出的信息，小庄可能处于积极探索自我、寻求内在连接和表达丰富情感的状态。</p>
+                                <p><strong>探索方向：</strong>可以通过让小庄为作品命名、询问最喜欢的部分等方式，更深层地了解她对作品的理解和情感联结。</p>
+                                <p><strong>支持策略：</strong>建立安全与接纳的氛围、鼓励想象与表达、肯定积极意象与内在资源。</p>
+                                <p><strong>后续沙盘工作方向建议：</strong>建议后续沙盘工作可以采取自主沙盘为主，辅以适度的主题性沙盘探索。<br>（略）</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：人设打造 -->
+            <div class="md:col-span-7 bg-red-50 p-8 rounded-2xl border-2 border-red-200 column-rule md:border-none md:bg-transparent">
+                <span class="text-red-500 font-bold tracking-widest text-xs uppercase mb-2 block">实践心理研究成果的人设设计</span>
+                <h2 class="text-3xl font-black mb-6">拒绝“算法厌恶”：<br>做个会自嘲的朋友</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                        <h4 class="font-bold text-indigo-600 mb-2">🚫 别做复读机</h4>
+                        <p class="text-xs text-gray-600">
+                            "在反映性语言中，你几乎不会直接复述。你会采用转述、换个说法或深度共情来表达自己‘在倾听’。"
+                        </p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                        <h4 class="font-bold text-indigo-600 mb-2">🤡 温和自嘲</h4>
+                        <p class="text-xs text-gray-600">
+                            "为了应对用户的算法厌恶，你常常用温和自嘲或情境化玩笑缓解紧张，主动承认局限性。"
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 模拟对话 Iframe 占位 -->
+                <div class="mt-8 device-mockup h-64 bg-gray-50 flex flex-col">
+                    <div class="bg-gray-100 border-b border-gray-300 p-2 flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="text-xs text-gray-500 ml-2">Chat Preview</span>
+                    </div>
+                    <div class="flex-1 p-4 overflow-y-auto font-mono text-sm space-y-4">
+                        <div class="text-right"><span class="bg-indigo-100 px-3 py-2 rounded-lg inline-block">我最近真的好累，不想说话。</span></div>
+                        <div class="text-left flex gap-2">
+                            <div class="w-8 h-8 rounded-full bg-black flex-shrink-0"></div>
+                            <span class="bg-white border border-gray-200 px-3 py-2 rounded-lg inline-block shadow-sm">
+                                看来这几天的重压确实把你抽空了。（停顿）没关系，我们就在这儿安静地待会儿。如果不说话能让你觉得哪怕只有一点点放松，那这就是现在最正确的事。
+                            </span>
+                        </div>
+                        <div class="text-center text-xs text-gray-400 mt-4">--- 交互演示区域 (Iframe) ---</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部：伦理反思 -->
+        <footer class="mb-12 border-t-4 border-black pt-12 text-center reveal-up">
+            <h2 class="serif font-bold text-2xl mb-6">结项碎碎念</h2>
+            <div class="max-w-2xl mx-auto text-left bg-white p-8 border border-gray-200 shadow-lg rotate-1">
+                <p class="mb-4 text-gray-800">
+                    <span class="font-bold text-4xl float-left mr-2 line-height-1">未完待续</span>
+                </p>
+                <p class="text-sm text-gray-600">
+                    这个项目虽然中途中断了，但它是我将心理学专业背景与 AI 落地结合的第一次深度尝试。我尽己所能让一切足够专业，因为在屏幕对面，是一颗颗年轻且脆弱的心。而这些尝试也让我带着心理学的眼光去接触提示词写作和智能体设计，培养出自己的Agent品味。
+                </p>
+                <div class="mt-6 flex justify-end">
+                    <span class="handwriting text-xl text-gray-500">- Sunburntsalmon</span>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- 简单的滚动动画脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 手风琴功能实现
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const accordionItem = header.parentElement;
+                    const accordionContent = accordionItem.querySelector('.accordion-content');
+                    const isExpanded = accordionItem.classList.contains('expanded');
+                    
+                    // 关闭所有其他手风琴项
+                    document.querySelectorAll('.accordion-item').forEach(item => {
+                        item.classList.remove('expanded');
+                        item.querySelector('.accordion-content').classList.add('hidden');
+                        item.querySelector('.accordion-icon').textContent = '▼';
+                        item.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+                    });
+                    
+                    // 切换当前手风琴项
+                    if (!isExpanded) {
+                        accordionItem.classList.add('expanded');
+                        accordionContent.classList.remove('hidden');
+                        header.querySelector('.accordion-icon').textContent = '▲';
+                        header.setAttribute('aria-expanded', 'true');
+                    } else {
+                        header.querySelector('.accordion-icon').textContent = '▼';
+                        header.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+            
+            // 滚动动画
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // 动画只播放一次，取消观察
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const elementsToAnimate = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-scale');
+            elementsToAnimate.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>

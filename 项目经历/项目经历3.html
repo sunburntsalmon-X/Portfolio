@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目呈现 | AI 写真与文创落地实录</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Serif+SC:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vermilion: #c92a2a; /* 朱砂红 - 强调重点与警示 */
+            --ink: #1f2937;       /* 墨色 - 沉稳背景 */
+            --paper: #f0eee9;     /* 宣纸白 - 基础色 */
+            --gold: #b45309;      /* 鎏金 - 价值点 */
+        }
+
+        body {
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: 'Noto Serif SC', serif;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c92a2a' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .brush-font { font-family: 'Zhi Mang Xing', cursive; }
+        .title-font { font-family: 'Ma Shan Zheng', cursive; }
+
+        /* 奏折/卷宗卡片 */
+        .dossier-card {
+            background: #fff;
+            border-left: 4px solid var(--vermilion);
+            box-shadow: 4px 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .dossier-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 6px 6px 20px rgba(0,0,0,0.1);
+        }
+        /* 批注印章效果 */
+        .stamp-mark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border: 2px solid var(--vermilion);
+            color: var(--vermilion);
+            font-size: 12px;
+            padding: 2px 6px;
+            transform: rotate(-10deg);
+            font-family: 'Zhi Mang Xing', cursive;
+            opacity: 0.7;
+        }
+
+        /* 垂直排版文字 (用于装饰) */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: 0.2em;
+        }
+
+        /* 时间轴线 */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: #d1d5db;
+            transform: translateX(-50%);
+        }
+
+        /* 强调高亮 */
+        .highlight-text {
+            background: linear-gradient(120deg, transparent 0%, transparent 60%, rgba(201, 42, 42, 0.1) 60%, rgba(201, 42, 42, 0.1) 100%);
+        }
+
+        .reveal-up { opacity: 0; transform: translateY(20px); transition: all 0.8s ease; }
+        .reveal-up.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+
+    <!-- 顶部状态 -->
+    <nav class="max-w-5xl mx-auto flex justify-between items-end mb-20 border-b-2 border-gray-800 pb-2">
+        <div>
+            <div class="text-xs font-mono text-gray-500 mb-1">PROJECT ARCHIVE: 003</div>
+            <div class="title-font text-3xl text-gray-900">AI破壁实录</div>
+        </div>
+        <div class="text-right hidden md:block">
+            <div class="text-xs text-gray-500">AI Generative Content × Physical Product</div>
+            <div class="brush-font text-xl text-red-800">AIGC打破了普通人的设计壁垒吗？</div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="max-w-5xl mx-auto mb-32 grid grid-cols-1 md:grid-cols-12 gap-12 items-center reveal-up">
+        <div class="md:col-span-8">
+            <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
+                当AI写真撞上<br>
+                <span class="text-red-800 relative inline-block">
+                    文创产业的墙
+                    <svg class="absolute w-full h-3 -bottom-1 left-0 text-red-800 opacity-30" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                </span>
+            </h1>
+            <p class="text-lg text-gray-700 leading-relaxed mb-8">
+                一次关于 <span class="font-bold">AIGC 落地文创项目</span> 的深度复盘。在技术迭代与市场定位的反复拉锯中，我试图在混乱的流程中建立秩序，寻找“虚拟创意”与“物理交付”的平衡点。
+            </p>
+            <div class="flex gap-4 text-xs font-bold tracking-wider text-gray-500">
+                <span class="border border-gray-400 px-3 py-1">成熟的换脸写真产品</span>
+                <span class="border border-gray-400 px-3 py-1">转型G端旅游文创</span>
+                <span class="border border-gray-400 px-3 py-1">AI硬件尝试</span>
+            </div>
+        </div>
+        <div class="md:col-span-4 relative flex justify-center">
+            <div class="w-48 h-64 border-4 border-gray-800 p-4 flex items-center justify-center relative bg-white shadow-xl rotate-3">
+                <div class="absolute top-2 left-2 w-full h-full border border-gray-300 -z-10 -translate-x-2 -translate-y-2"></div>
+                <div class="text-center">
+                    <div class="title-font text-2xl mb-2 text-gray-400">复盘<br>奏折</div>
+                    <div class="w-8 h-1 bg-red-800 mx-auto my-2"></div>
+                    <div class="text-xs text-gray-500 font-mono">CASE STUDY</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto space-y-32">
+
+        <!-- 章节一：定位之争 -->
+        <section class="reveal-up">
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-4xl title-font text-red-800">01.</span>
+                <h2 class="text-2xl font-bold">产品定位博弈：猎奇引流 vs 情感赋值</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- 左侧：现状描述 (暗含痛点) -->
+                <div class="prose text-gray-600">
+                    <p class="mb-4">
+                        加入项目中期，技术重心转向“多人换脸”。在策略上，团队内部曾出现过为了短期流量而倾向于“讽喻/猎奇”题材的声音。
+                    </p>
+                    <p>
+                        但我基于对 C 端用户的洞察坚持认为：全家福产品的核心价值不在于玩梗，而在于<span class="text-gray-900 font-bold border-b-2 border-red-200">“体面”与“情感链接”</span>。这是用户心中理想生活的投射，而非单纯的娱乐素材。
+                    </p>
+                </div>
+
+                <!-- 右侧：我的坚持 (方案展示) -->
+                <div class="dossier-card p-6 bg-gray-50">
+                    <div class="stamp-mark">提案记录</div>
+                    <h3 class="font-bold mb-4 text-gray-900">我的产品策略提案</h3>
+                    <ul class="space-y-3 text-sm text-gray-700">
+                        <li class="flex gap-2">
+                            <span class="text-red-800 font-bold">√</span>
+                            <span><strong>情感路线主导：</strong> 设计古建筑合影、科幻未来等主题，强调“家族传承”与“美好愿景”的视觉叙事。</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="text-red-800 font-bold">√</span>
+                            <span><strong>个人 IP 化建议：</strong> 提议开发智能选片/修片 Agent，赋能用户自我表达，而非仅做模板的搬运工。</span>
+                        </li>
+<li class="flex gap-2">
+                            <span class="text-red-800 font-bold">√</span>
+                            <span><strong>盯准市场需求：</strong> 提议将成熟迅速的换脸技术应用于AI剧集项目，补充当下AIGC多主体生成的缺陷。</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 章节二：落地之难 -->
+        <section class="reveal-up">
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-4xl title-font text-red-800">02.</span>
+                <h2 class="text-2xl font-bold">最后一公里：AIGC设计 与实体工业的断层</h2>
+            </div>
+
+            <div class="bg-white border border-gray-200 p-8 shadow-sm relative">
+                <div class="absolute -left-3 top-8 bg-black text-white px-4 py-1 text-sm font-bold shadow-lg">供应链实录</div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-6">
+                    <div>
+                        <h4 class="font-bold text-lg mb-2 text-red-800">设计语言的失语</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            团队面临的挑战在于：既无法完全遵循传统印刷的严格规范（如分层设计稿），也未能充分释放 AIGC 的效率优势。这种<span class="highlight-text">“中间态”的尴尬</span>，导致了文创产品在定制阶段时反复试错。
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2 text-red-800">物理世界的制裁</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            从屏幕像素到亚克力切割，每一个环节都有信息折损。我不得不深入供应链末梢，去解决色差、切割线错位、抠图等“小事儿”，这让我深刻理解了<span class="highlight-text">实体产品的物理边界</span>。
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2 text-red-800">敏捷与周期的错配</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            互联网思维下的“盲目加急要求”在实体生产中失效了。缺乏对生产周期的敬畏，对批量生产的成本效益的真切理解，导致了成本的无谓消耗和人员沟通信任成本。这不仅是执行问题，更是<span class="highlight-text">顶层流程设计</span>的缺失。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 章节三：复盘奏折 -->
+        <section class="reveal-up">
+            <div class="text-center mb-12">
+                <span class="brush-font text-3xl text-gray-400">我离职前的谏言</span>
+                <h2 class="text-3xl font-bold mt-2">建设性复盘：从混沌到秩序</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 复盘卡片 1 -->
+                <div class="dossier-card p-8">
+                    <div class="text-xs font-mono text-gray-400 mb-2">ISSUE: 01</div>
+                    <h3 class="text-xl font-bold mb-4">拒绝闭门造车：市场调研的前置性</h3>
+                    <p class="text-sm text-gray-600 mb-4">
+                        设计不能仅凭“领导叫好”。我指出了在非遗与文创产品开发中，缺乏早期市场验证（MVP）是导致G端项目在C端水土不服的根本原因。
+                    </p>
+                    <div class="bg-gray-100 p-3 text-xs text-gray-500 rounded">
+                        <strong>建议：</strong> 建立最小闭环反馈机制，先做“常见文创产品”圈层的灰度测试，对于更加复杂的产品如金饰和工艺蜡烛等，最好深度合作、规避盲目试错风险。
+                    </div>
+                </div>
+
+                <!-- 复盘卡片 2 -->
+                <div class="dossier-card p-8">
+                    <div class="text-xs font-mono text-gray-400 mb-2">ISSUE: 02</div>
+                    <h3 class="text-xl font-bold mb-4">流程标准化：建立 AIGC 交付规范</h3>
+                    <p class="text-sm text-gray-600 mb-4">
+                        针对设计与供应链的脱节，我建议制定一套《AI 生成图转实物制作规范》，明确分辨率、产品尺寸和交付图片格式，减少因“不懂行”带来的反复沟通成本。
+                    </p>
+                    <div class="bg-gray-100 p-3 text-xs text-gray-500 rounded">
+                        <strong>价值：</strong> 将个人的“踩坑经验”固化为团队的“避雷手册”。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部 Footer -->
+        <footer class="mt-32 pt-12 border-t border-gray-300 text-center reveal-up">
+            <div class="title-font text-4xl text-gray-300 mb-6">不破不立</div>
+            <p class="max-w-2xl mx-auto text-gray-500 text-sm leading-relaxed mb-12">
+                这段经历虽充满摩擦，却极其珍贵。它教会我跳出 AI创业者 的技术自嗨，去敬畏市场规律与实体工业标准。<br>
+                一个优秀的产品经理，不仅要能仰望云端的技术，更要能俯身处理泥土里的现实。
+            </p>
+            <div class="inline-block border border-gray-800 px-6 py-2 text-xs tracking-widest uppercase">
+                End of Archive
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
